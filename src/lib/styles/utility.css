@@ -1,0 +1,14 @@
+@media (max-width: 55em) {
+	.noscroll {
+		overflow: hidden;
+	}
+}
+
+.visually-hidden:not(:focus):not(:active):not(:focus-within) {
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
