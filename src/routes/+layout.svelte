@@ -151,7 +151,7 @@
 	main {
 		padding-top: var(--top-gutter);
 	}
-
+	
 	@media (min-width: 55em) {
 		.layout {
 			display: grid;
@@ -160,7 +160,7 @@
 			grid-template-areas:
 				'menu menu'
 				'nav main';
-			gap: 0 var(--gap-width);
+			gap: 0 calc(var(--gap-width) * 0.5 );
 		}
 
 		menu {
@@ -212,6 +212,12 @@
 		main {
 			grid-area: main;
 			margin-bottom: 6rem;
+		}
+	}
+
+	@media (min-width: 73rem) {
+		.layout {
+			gap: 0 var(--gap-width);
 		}
 	}
 </style>
