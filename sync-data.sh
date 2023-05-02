@@ -1,5 +1,11 @@
 echo "Starting wiki sync"
 
+if [ -f .env ]; then
+				echo "Loading environment variables from .env file"
+				eval $(egrep -v '^#' .env | xargs)
+fi
+
+
 if [ "$GITHUB_PROJECT" == "" ]; then
 				echo "Error: GIT_PROJECT is not set"
 				exit 1;
