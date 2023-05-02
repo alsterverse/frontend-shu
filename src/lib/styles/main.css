@@ -9,6 +9,19 @@
 	--ease: cubic-bezier(0.42, 0.35, 1, 0.98);
 	--ease-out: cubic-bezier(0, -0.04, 0, 0.99);
 	--ease-in: cubic-bezier(0, 0.99, 0.88, 0.99);
+
+	--h1: 2rem;
+	--h2: 1.5rem;
+	--h3: 1.25rem;
+	--h4: 1.25rem;
+	--h: 1.125rem;
+
+	--h2-margin-top: 3.5rem;
+	--h3-margin-top: 3rem;
+	--h-margin-top: 2.5rem;
+	--p-margin-top: 1.25rem;
+
+	--h-line-height: 1.2;
 }
 
 html {
@@ -53,44 +66,44 @@ h3,
 h4,
 h5,
 h6 {
-	line-height: 1.2;
+	line-height: var(--h-line-height);
 	letter-spacing: normal;
 	font-weight: 600;
 }
 
 h1 {
-	font-size: 2rem;
+	font-size: var(--h1);
 }
 
 h2 {
-	font-size: 1.5rem;
+	font-size: var(--h2);
 }
 
 h3 {
-	font-size: 1.25rem;
+	font-size: var(--h3);
 }
 h4,
 h5,
 h6 {
-	font-size: 1.125rem;
+	font-size: var(--h);
 }
 
 * + h2 {
-	margin-top: 3.5rem;
+	margin-top: var(--h2-margin-top);
 }
 
 * + h3 {
-	margin-top: 3rem;
+	margin-top: var(--h3-margin-top);
 }
 
 * + h4,
 * + h5,
 * + h6 {
-	margin-top: 2.5rem;
+	margin-top: var(--h-margin-top);
 }
 
 * + p {
-	margin-top: 1.25rem;
+	margin-top: var(--p-margin-top);
 }
 
 /* since our h2 tags create sections we need to add a selector to target them */
@@ -105,7 +118,7 @@ header + section > p:first-child {
 }
 @supports selector(:has(*)) {
 	header + section > p:has(strong:only-child):first-child {
-		margin-top: 2.5rem;
+		margin-top: var(--h-margin-top);
 	}
 }
 
@@ -140,51 +153,14 @@ pre {
 		font-weight: 600;
 	}
 
-	h1,
-	h2,
-	h3,
-	h4,
-	h5,
-	h6 {
-		line-height: 1.1;
-	}
+	:root {
+		--h1: 2.5rem;
+		--h2: 2rem;
+		--h3: 1.75rem;
+		--h4: 1.5rem;
+		--h: 1.25rem;
+		--h-line-height: 1.1;
 
-	h1 {
-		font-size: 2.5rem;
-	}
-
-	h2 {
-		font-size: 2rem;
-	}
-
-	h3 {
-		font-size: 1.75rem;
-	}
-
-	h4 {
-		font-size: 1.5rem;
-	}
-
-	h5,
-	h6 {
-		font-size: 1.25rem;
-	}
-
-	* + h2 {
-		margin-top: 3.5rem;
-	}
-
-	* + h3 {
-		margin-top: 3rem;
-	}
-
-	* + h4,
-	* + h5,
-	* + h6 {
-		margin-top: 2.5rem;
-	}
-
-	* + p {
-		margin-top: 1.5rem;
+		--p-margin-top: 1.5rem;
 	}
 }
