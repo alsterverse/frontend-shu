@@ -212,7 +212,6 @@
 
 		main {
 			grid-area: main;
-			margin-bottom: 6rem;
 		}
 	}
 
