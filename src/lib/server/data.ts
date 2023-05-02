@@ -20,3 +20,6 @@ export const to_slug = (value?: string | null) =>
 
 export const get_file_edit_url = (name: string) =>
 	`https://github.com/${GITHUB_PROJECT}/wiki/${encodeURIComponent(name)}/_edit`;
+
+export const raw_url = (name: string) =>
+	`https://raw.githubusercontent.com/wiki/${GITHUB_PROJECT}/${name}.md`;
