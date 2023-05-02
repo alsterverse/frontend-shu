@@ -4,7 +4,6 @@
 	import '$lib/styles/code.css';
 
 	export let data;
-	const { title, sections, modified, edit, author } = data.page;
 
 	let active: string | null = null;
 
@@ -14,21 +13,21 @@
 </script>
 
 <svelte:head>
-	<title>{title} | Alster Docs</title>
+	<title>{data.page.title} | Alster Docs</title>
 </svelte:head>
 <article use:active_section on:activesection={on_active}>
 	<div class="content">
 		<header>
-			<h1 id="top"><a href="#top">{title}</a></h1>
+			<h1 id="top"><a href="#top">{data.page.title}</a></h1>
 			<div>
 				<ul>
-					<li>Edited <time datetime={modified.value}>{modified.display}</time></li>
-					<li>{author}</li>
+					<li>Edited <time datetime={data.page.modified.value}>{data.page.modified.display}</time></li>
+					<li>{data.page.author}</li>
 				</ul>
-				<a class="edit" href={edit}>Edit page</a>
+				<a class="edit" href={data.page.edit}>Edit page</a>
 			</div>
 		</header>
-		{#each sections as section}
+		{#each data.page.sections as section}
 			<section id={section.slug}>
 				{#if section.title && section.slug}
 					<h2 id={section.slug}><a href={`#${section.slug}`}>{section.title}</a></h2>
@@ -37,12 +36,12 @@
 			</section>
 		{/each}
 	</div>
-	{#if sections.length > 1}
+	{#if data.page.sections.length > 1}
 		<aside>
 			<nav>
 				<h2>In this article</h2>
 				<NavigationList tag="ol">
-					{#each sections as section}
+					{#each data.page.sections as section}
 						{#if section.title && section.slug}
 							<li>
 								<a
