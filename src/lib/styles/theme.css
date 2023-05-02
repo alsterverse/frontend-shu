@@ -11,7 +11,7 @@
 	--neutral-1: hsla(0, 0%, 98%, 1);
 	--neutral-2: hsla(0, 0%, 92%, 1);
 	--neutral-3: hsla(0, 0%, 80%, 1);
-	--neutral-4: hsla(0, 0%, 56%, 1);
+	--neutral-4: hsla(0, 0%, 70%, 1);
 	--neutral-5: hsla(0, 0%, 42%, 1);
 	--neutral-blur: hsla(0, 0%, 84%, 0.5);
 	--neutral-gradient-start: hsl(0 0% 97%);
@@ -97,7 +97,7 @@ body.light {
 		--theme-accent: var(--purple-1);
 		--theme-nav-gradient-start: var(--deepblue-gradient-start);
 		--theme-nav-gradient-end: var(--deepblue-gradient-end);
-		--theme-body: var(--neutral-3);
+		--theme-body: var(--neutral-4);
 		--theme-panel: var(--deepblue-blur);
 		--theme-track: var(--deepblue-4);
 		--theme-card: var(--deepblue-3);
@@ -127,7 +127,7 @@ body.dark {
 	--theme-accent: var(--purple-1);
 	--theme-nav-gradient-start: var(--deepblue-gradient-start);
 	--theme-nav-gradient-end: var(--deepblue-gradient-end);
-	--theme-body: var(--neutral-3);
+	--theme-body: var(--neutral-4);
 	--theme-panel: var(--deepblue-blur);
 	--theme-track: var(--deepblue-4);
 	--theme-card: var(--deepblue-3);
