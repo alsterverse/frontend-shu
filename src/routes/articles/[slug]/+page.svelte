@@ -70,7 +70,7 @@
 	}
 
 	header div {
-		margin-top: 2rem;
+		margin-top: 1.5rem;
 		padding-top: 0.5rem;
 		display: flex;
 		justify-content: space-between;
@@ -147,6 +147,22 @@
 		display: none;
 	}
 
+	nav {
+		position: sticky;
+		top: calc(var(--header-height) + var(--top-gutter));
+	}
+
+	nav > h2 {
+		font-size: 1rem;
+		margin-bottom: 1.5rem;
+	}
+
+	@media (min-width: 55em) {
+		header div {
+			margin-top: 2rem;
+		}
+	}
+	
 	@media (min-width: 73rem) {
 		aside {
 			display: block;
@@ -160,13 +176,5 @@
 		}
 	}
 
-	nav {
-		position: sticky;
-		top: calc(var(--header-height) + var(--top-gutter));
-	}
-
-	nav > h2 {
-		font-size: 1rem;
-		margin-bottom: 1.5rem;
-	}
+	
 </style>

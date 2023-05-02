@@ -25,6 +25,7 @@ html {
 body {
 	font-family: 'Inter', sans-serif;
 	line-height: 1.5;
+	letter-spacing: 0.04rem;
 	font-weight: 400;
 	margin: 0;
 	padding: 0;
@@ -52,50 +53,44 @@ h3,
 h4,
 h5,
 h6 {
-	line-height: 1;
-}
-
-h1,
-h2,
-h3,
-h4 {
-	font-weight: 500;
-}
-
-h1 {
-	font-size: 2.5rem;
-}
-
-h2 {
-	font-size: 2rem;
-}
-
-h3 {
-	font-size: 1.75rem;
-}
-
-h4 {
-	font-size: 1.5rem;
-}
-
-h5,
-h6 {
-	font-size: 1.25rem;
+	line-height: 1.2;
+	letter-spacing: normal;
 	font-weight: 600;
 }
 
-* + h2,
-* + h3 {
+h1 {
+	font-size: 2rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+}
+h4,
+h5,
+h6 {
+	font-size: 1.125rem;
+}
+
+* + h2 {
 	margin-top: 3.5rem;
 }
-* + h4,
-* + h5,
-* + h6 {
+
+* + h3 {
 	margin-top: 3rem;
 }
 
+* + h4,
+* + h5,
+* + h6 {
+	margin-top: 2.5rem;
+}
+
 * + p {
-	margin-top: 2rem;
+	margin-top: 1.25rem;
 }
 
 /* since our h2 tags create sections we need to add a selector to target them */
@@ -122,6 +117,7 @@ h2 > a {
 blockquote {
 	font-size: 1.75rem;
 	line-height: 1.1428571429;
+	letter-spacing: 0.02rem;
 	font-weight: 400;
 	margin: 2.5rem 0;
 }
@@ -129,4 +125,66 @@ blockquote {
 pre {
 	margin-top: 3rem;
 	overflow: scroll;
+}
+
+@media (min-width: 55em) {
+	h1,
+	h2,
+	h3,
+	h4 {
+		font-weight: 500;
+	}
+
+	h5,
+	h6 {
+		font-weight: 600;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		line-height: 1.1;
+	}
+
+	h1 {
+		font-size: 2.5rem;
+	}
+
+	h2 {
+		font-size: 2rem;
+	}
+
+	h3 {
+		font-size: 1.75rem;
+	}
+
+	h4 {
+		font-size: 1.5rem;
+	}
+
+	h5,
+	h6 {
+		font-size: 1.25rem;
+	}
+
+	* + h2 {
+		margin-top: 3.5rem;
+	}
+
+	* + h3 {
+		margin-top: 3rem;
+	}
+
+	* + h4,
+	* + h5,
+	* + h6 {
+		margin-top: 2.5rem;
+	}
+
+	* + p {
+		margin-top: 1.5rem;
+	}
 }
