@@ -14,6 +14,7 @@ export const get_all_markdown_paths = () =>
 	glob.sync(`${REPOSITORY}**/*.md`, { ignore: '.git/**' });
 
 export const get_file = (path: string) => readFileSync(path, 'utf-8');
+export const get_meta = (path: string) => readFileSync(`${path}.meta`, 'utf-8');
 
 export const to_slug = (value?: string | null) =>
 	slugify(value ?? 'unknown', { strict: true, lower: true });
