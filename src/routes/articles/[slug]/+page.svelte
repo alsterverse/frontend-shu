@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import { active_section } from '$lib/actions/active-section';
 	import NavigationList from '$lib/components/navigation-list.svelte';
 	import '$lib/styles/code.css';
@@ -15,6 +16,8 @@
 <svelte:head>
 	<title>{data.page.title} | Alster Docs</title>
 </svelte:head>
+
+{#key $page.params.slug}
 <article use:active_section on:activesection={on_active}>
 	<div class="content">
 		<header>
@@ -56,7 +59,7 @@
 		</aside>
 	{/if}
 </article>
-
+{/key}
 <style>
 	article {
 		padding-bottom: 7rem;
