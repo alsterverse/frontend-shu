@@ -60,6 +60,8 @@
 	ol {
 		--origin-in: top;
 		--origin-out: bottom;
+		--duration: 200ms;
+		--delay: 200ms;
 
 		display: flex;
 		flex-direction: column;
@@ -69,6 +71,7 @@
 		font-size: 1rem;
 		overflow: auto;
 		max-height: calc(100vh - (2 * var(--header-height)));
+		box-shadow: inset 4px 0px var(--theme-panel);
 	}
 
 	ul.up,
@@ -109,32 +112,30 @@
 	}
 
 	ul :global(a[aria-current='page']) {
-		font-weight: 700;
+		opacity: 0.8;
 	}
 
 	ol :global(a[aria-current='location']) {
-		font-weight: 500;
+		opacity: 0.8;
 	}
 
 	ul :global(a::before),
 	ol :global(a::before) {
+
 		position: absolute;
 		top: 0;
 		bottom: 0;
 		left: 0;
 		content: '';
 		width: 0.25rem;
-		background-color: var(--theme-panel);
+		background-color: var(--theme-accent);
 		background-position: bottom;
 		transform: scale(1, 0);
-
-		--duration: 300ms;
-		--delay: 200ms;
 
 		transform-origin: var(--origin-out);
 		transition-property: transform, background-color;
 		transition-duration: var(--duration), var(--duration);
-		transition-delay: var(--delay), var(--delay);
+		transition-delay: calc( var(--delay) * 0.5 ), var(--delay);
 		transition-timing-function: ease-out, ease-out;
 	}
 
@@ -147,8 +148,8 @@
 	ol :global(a[aria-current='location']::before) {
 		background-color: var(--theme-accent);
 		transform: scale(1, 1);
-		transition-delay: var(--delay), var(--delay);
-		transform-origin: var(--origin-in);
+		transition-delay: 0ms, var(--delay);
+		transform-origin: var(--origin-in);		
 	}
 
 	@media (min-width: 55em) {
