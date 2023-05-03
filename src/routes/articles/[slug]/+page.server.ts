@@ -37,7 +37,7 @@ export const load = (async ({ params }) => {
 		if (to_slug(get_name_from_path(path)) === params.slug) {
 			return {
 				page: await get_page(path)
-			}
+			};
 		}
 	}
 

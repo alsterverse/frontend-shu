@@ -2,10 +2,10 @@
 	import { overflow_ratio } from '$lib/actions/overflow_ratio';
 
 	export let tag: 'ul' | 'ol' = 'ul';
-	export let direction: "up" | "down";
+	export let direction: 'up' | 'down';
 	let start_ratio = 0;
 	let end_ratio = 0;
-	
+
 	function handle_ratios(event: CustomEvent<number>) {
 		if (event.type === 'startoverflowratio') {
 			start_ratio = event.detail;
@@ -18,7 +18,7 @@
 <div style="--start-ratio: {start_ratio}; --end-ratio: {end_ratio}">
 	<svelte:element
 		this={tag}
-		class:up={direction === "up"}
+		class:up={direction === 'up'}
 		use:overflow_ratio
 		on:startoverflowratio={handle_ratios}
 		on:endoverflowratio={handle_ratios}
@@ -72,7 +72,7 @@
 	}
 
 	ul.up,
-	ol.up { 
+	ol.up {
 		--origin-in: bottom;
 		--origin-out: top;
 	}
@@ -123,14 +123,13 @@
 		bottom: 0;
 		left: 0;
 		content: '';
-		width: .25rem;
+		width: 0.25rem;
 		background-color: var(--theme-panel);
 		background-position: bottom;
 		transform: scale(1, 0);
 
 		--duration: 300ms;
 		--delay: 200ms;
-
 
 		transform-origin: var(--origin-out);
 		transition-property: transform, background-color;
@@ -147,7 +146,7 @@
 	ul :global(a[aria-current='page']::before),
 	ol :global(a[aria-current='location']::before) {
 		background-color: var(--theme-accent);
-		transform: scale(1, 1);		
+		transform: scale(1, 1);
 		transition-delay: var(--delay), var(--delay);
 		transform-origin: var(--origin-in);
 	}

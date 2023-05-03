@@ -11,26 +11,27 @@
 	import { browser } from '$app/environment';
 
 	export let data;
-	let direction: "up" | "down" = "down";
-	
-	afterNavigate(({from, to}) => {
+	let direction: 'up' | 'down' = 'down';
+
+	afterNavigate(({ from, to }) => {
 		let previous_id = from?.params?.slug ?? '';
 		let current_id = to?.params?.slug ?? '';
 
 		const prev_index = data.navigation_items.findIndex((item) => item.slug === previous_id);
 		const current_index = data.navigation_items.findIndex((item) => item.slug === current_id);
 
-		direction =  prev_index > current_index ? "up" : "down";
+		direction = prev_index > current_index ? 'up' : 'down';
 	});
 </script>
+
 <div class="layout">
 	<nav
-	id="wiki-articles"
-	aria-labelledby="menu-button"
-	aria-hidden={browser && !$is_large_screen && !$menu_expanded ? true : undefined}
-	class:interactive={browser}
+		id="wiki-articles"
+		aria-labelledby="menu-button"
+		aria-hidden={browser && !$is_large_screen && !$menu_expanded ? true : undefined}
+		class:interactive={browser}
 	>
-		<NavigationList direction={direction}>
+		<NavigationList {direction}>
 			{#each data.navigation_items as item, index}
 				<li>
 					<a
@@ -186,9 +187,9 @@
 
 	main {
 		padding-top: var(--top-gutter);
-		padding-bottom: 7rem;	
+		padding-bottom: 7rem;
 	}
-	
+
 	@media (min-width: 55em) {
 		.layout {
 			display: grid;
@@ -197,7 +198,7 @@
 			grid-template-areas:
 				'menu menu'
 				'nav main';
-			gap: 0 calc(var(--gap-width) * 0.5 );
+			gap: 0 calc(var(--gap-width) * 0.5);
 		}
 
 		menu,
