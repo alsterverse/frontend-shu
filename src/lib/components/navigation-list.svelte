@@ -121,7 +121,6 @@
 
 	ul :global(a::before),
 	ol :global(a::before) {
-
 		position: absolute;
 		top: 0;
 		bottom: 0;
@@ -135,7 +134,7 @@
 		transform-origin: var(--origin-out);
 		transition-property: transform, background-color;
 		transition-duration: var(--duration), var(--duration);
-		transition-delay: calc( var(--delay) * 0.5 ), var(--delay);
+		transition-delay: calc(var(--delay) * 0.5), var(--delay);
 		transition-timing-function: ease-out, ease-out;
 	}
 
@@ -149,7 +148,7 @@
 		background-color: var(--theme-accent);
 		transform: scale(1, 1);
 		transition-delay: 0ms, var(--delay);
-		transform-origin: var(--origin-in);		
+		transform-origin: var(--origin-in);
 	}
 
 	@media (min-width: 55em) {
