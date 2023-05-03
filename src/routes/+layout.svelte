@@ -64,7 +64,6 @@
 
 	nav {
 		position: static;
-		order: 1;
 		padding-top: var(--top-gutter);
 
 		background: var(--theme-bg);
@@ -98,7 +97,6 @@
 		top: 0;
 		left: 0;
 		right: 0;
-		order: 0;
 		margin: 0;
 		padding: 0;
 		background-color: var(--theme-panel);
@@ -177,7 +175,6 @@
 
 	main {
 		padding-top: var(--top-gutter);
-		order: 2;
 	}
 	
 	@media (min-width: 55em) {
