@@ -175,6 +175,7 @@
 
 	main {
 		padding-top: var(--top-gutter);
+		padding-bottom: 7rem;	
 	}
 	
 	@media (min-width: 55em) {
