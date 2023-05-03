@@ -7,6 +7,7 @@
 	import ThemeSwitcher from '$lib/components/theme-switcher.svelte';
 	import { is_large_screen, menu_expanded } from '$lib/app.js';
 	import ButtonMenuToggle from '$lib/components/button-menu-toggle.svelte';
+	import { browser } from '$app/environment';
 
 	export let data;
 </script>
@@ -15,7 +16,8 @@
 	<nav
 		id="wiki-articles"
 		aria-labelledby="menu-button"
-		aria-hidden={!$is_large_screen && !$menu_expanded ? true : undefined}
+		aria-hidden={browser && !$is_large_screen && !$menu_expanded ? true : undefined}
+		class:interactive={browser}
 	>
 		<NavigationList>
 			{#each data.navigation_items as item, index}
@@ -32,15 +34,17 @@
 			{/each}
 		</NavigationList>
 	</nav>
-	<menu>
+	<menu class:interactive={browser}>
 		<section>
 			<a href="/" class="logo"><span class="visually-hidden">Home</span></a>
 			<ButtonMenuToggle
 				class={'button-menu-toggle'}
 				on:click={$menu_expanded ? menu_expanded.set(false) : menu_expanded.set(true)}
-				open={$menu_expanded}
+				open={$menu_expanded && browser}
 			/>
-			<ThemeSwitcher class={`theme-switcher${!$menu_expanded ? ' hidden' : ''}`} />
+			{#if browser}
+				<ThemeSwitcher class={`theme-switcher${!$menu_expanded ? ' hidden' : ''}`} />
+			{/if}
 		</section>
 	</menu>
 	<main>
@@ -50,6 +54,8 @@
 
 <style>
 	.layout {
+		display: flex;
+		flex-direction: column;
 		max-width: var(--max-width);
 		margin: 0 auto;
 		padding: 0 var(--gutter-width);
@@ -57,6 +63,17 @@
 	}
 
 	nav {
+		position: static;
+		padding-top: var(--top-gutter);
+
+		background: var(--theme-bg);
+		transform: translateX(0);
+
+		pointer-events: initial;
+		transition: transform 200ms var(--ease-out);
+	}
+
+	nav.interactive {
 		position: fixed;
 		top: 0;
 		right: 0;
@@ -64,12 +81,9 @@
 		bottom: 0;
 		z-index: 5;
 
-		border-right: 0.25rem solid var(--theme-panel);
-		background: var(--theme-bg);
-		transform: translateX(0);
+		padding-top: 0;
 
-		pointer-events: initial;
-		transition: transform 200ms var(--ease-out);
+		border-right: 0.25rem solid var(--theme-panel);
 	}
 
 	nav[aria-hidden='true'] {
@@ -79,19 +93,29 @@
 	}
 
 	menu {
-		position: fixed;
-		bottom: var(--gutter-width);
-		z-index: 10;
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
 		margin: 0;
 		padding: 0;
 		background-color: var(--theme-panel);
 		backdrop-filter: blur(10px);
 		-webkit-backdrop-filter: blur(10px);
-		width: calc(100vw - var(--gutter-width) * 2);
 
 		transition-property: background-color, width;
 		transition-duration: var(--color-transition-duration), 380ms;
 		transition-timing-function: var(--ease) var(--ease-out);
+	}
+
+	menu.interactive {
+		position: fixed;
+		bottom: var(--gutter-width);
+		left: unset;
+		right: unset;
+		top: unset;
+		z-index: 10;
+		width: calc(100vw - var(--gutter-width) * 2);
 	}
 
 	section {
@@ -164,7 +188,8 @@
 			gap: 0 calc(var(--gap-width) * 0.5 );
 		}
 
-		menu {
+		menu,
+		menu.interactive {
 			top: 0;
 			left: 0;
 			right: 0;
@@ -187,7 +212,8 @@
 			display: initial;
 		}
 
-		nav {
+		nav,
+		nav.interactive {
 			position: static;
 			top: var(--header-height);
 			right: unset;
@@ -199,6 +225,7 @@
 			max-width: var(--aside-width);
 			background: unset;
 			padding-top: var(--top-gutter);
+			margin-top: 0;
 		}
 
 		nav :global(> div) {
