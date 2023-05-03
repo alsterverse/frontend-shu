@@ -61,10 +61,6 @@
 </article>
 {/key}
 <style>
-	article {
-		padding-bottom: 7rem;
-	}
-
 	header {
 		display: flex;
 		flex-direction: column;
