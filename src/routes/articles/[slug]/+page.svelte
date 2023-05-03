@@ -7,9 +7,11 @@
 	export let data;
 
 	let active: string | null = null;
+	let direction: "up" | "down" = "down";
 
-	const on_active = (event: CustomEvent<string>) => {
-		active = event.detail;
+	const on_active = (event: CustomEvent<{ active: string, direction: "up" | "down" }>) => {
+		active = event.detail.active;
+		direction = event.detail.direction;
 	};
 </script>
 
@@ -43,7 +45,7 @@
 		<aside>
 			<nav>
 				<h2>In this article</h2>
-				<NavigationList tag="ol">
+				<NavigationList direction={direction} tag="ol">
 					{#each data.page.sections as section}
 						{#if section.title && section.slug}
 							<li>
