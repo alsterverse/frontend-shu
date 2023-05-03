@@ -30,6 +30,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@sentry/sveltekit": "^7.50.0",
 		"@sveltejs/adapter-static": "^2.0.2",
 		"@types/prismjs": "^1.26.0",
 		"date-fns": "^2.29.3",
