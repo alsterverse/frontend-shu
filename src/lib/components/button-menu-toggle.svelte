@@ -62,12 +62,12 @@
 			transform: rotate(22deg) scale(1, 1);
 		}
 		20% {
-			transform: rotate(45deg) translate(0, 0) scale(1,1);
+			transform: rotate(45deg) translate(0, 0) scale(1, 1);
 		}
-		50% {			
+		50% {
 			transform: rotate(45deg) translate(0, -75%) scale(1, 2);
 		}
-		100% {			
+		100% {
 			transform: rotate(45deg) translate(0, -75%) scale(0.35, 2);
 		}
 	}

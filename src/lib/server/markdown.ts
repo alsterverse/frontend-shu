@@ -58,12 +58,13 @@ function section(heading: Heading) {
 
 function code_block(code: Code) {
 	loadLanguages([code.lang ?? '']);
-	return `<pre class="language-${code.lang ?? ''}"><code class="language-${code.lang ?? ''
-		}">${prism.highlight(
-			code.value,
-			prism.languages[code.lang ?? ''],
-			code.lang ?? ''
-		)}</code></pre>`;
+	return `<pre class="language-${code.lang ?? ''}"><code class="language-${
+		code.lang ?? ''
+	}">${prism.highlight(
+		code.value,
+		prism.languages[code.lang ?? ''],
+		code.lang ?? ''
+	)}</code></pre>`;
 }
 
 export function html_block(content: Content) {

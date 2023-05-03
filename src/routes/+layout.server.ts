@@ -1,10 +1,5 @@
 import type { LayoutServerLoad } from './$types';
-import {
-	decode_name,
-	get_name_from_path,
-	get_all_markdown_paths,
-	to_slug
-} from '$lib/server/data';
+import { decode_name, get_name_from_path, get_all_markdown_paths, to_slug } from '$lib/server/data';
 import { WIKI_HOME } from '$env/static/private';
 import { error } from '@sveltejs/kit';
 

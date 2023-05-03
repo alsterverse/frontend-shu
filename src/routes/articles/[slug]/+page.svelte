@@ -7,9 +7,9 @@
 	export let data;
 
 	let active: string | null = null;
-	let direction: "up" | "down" = "down";
+	let direction: 'up' | 'down' = 'down';
 
-	const on_active = (event: CustomEvent<{ active: string, direction: "up" | "down" }>) => {
+	const on_active = (event: CustomEvent<{ active: string; direction: 'up' | 'down' }>) => {
 		active = event.detail.active;
 		direction = event.detail.direction;
 	};
@@ -20,48 +20,52 @@
 </svelte:head>
 
 {#key $page.params.slug}
-<article use:active_section on:activesection={on_active}>
-	<div class="content">
-		<header>
-			<h1 id="top"><a href="#top">{data.page.title}</a></h1>
-			<div>
-				<ul>
-					<li>Edited <time datetime={data.page.modified.value}>{data.page.modified.display}</time></li>
-					<li>{data.page.author}</li>
-				</ul>
-				<a class="edit" href={data.page.edit}>Edit page</a>
-			</div>
-		</header>
-		{#each data.page.sections as section}
-			<section id={section.slug}>
-				{#if section.title && section.slug}
-					<h2 id={section.slug}><a href={`#${section.slug}`}>{section.title}</a></h2>
-				{/if}
-				{@html section.content}
-			</section>
-		{/each}
-	</div>
-	{#if data.page.sections.length > 1}
-		<aside>
-			<nav>
-				<h2>In this article</h2>
-				<NavigationList direction={direction} tag="ol">
-					{#each data.page.sections as section}
-						{#if section.title && section.slug}
-							<li>
-								<a
-									href={`#${section.slug}`}
-									aria-current={active === section.slug ? 'location' : undefined}>{section.title}</a
-								>
-							</li>
-						{/if}
-					{/each}
-				</NavigationList>
-			</nav>
-		</aside>
-	{/if}
-</article>
+	<article use:active_section on:activesection={on_active}>
+		<div class="content">
+			<header>
+				<h1 id="top"><a href="#top">{data.page.title}</a></h1>
+				<div>
+					<ul>
+						<li>
+							Edited <time datetime={data.page.modified.value}>{data.page.modified.display}</time>
+						</li>
+						<li>{data.page.author}</li>
+					</ul>
+					<a class="edit" href={data.page.edit}>Edit page</a>
+				</div>
+			</header>
+			{#each data.page.sections as section}
+				<section id={section.slug}>
+					{#if section.title && section.slug}
+						<h2 id={section.slug}><a href={`#${section.slug}`}>{section.title}</a></h2>
+					{/if}
+					{@html section.content}
+				</section>
+			{/each}
+		</div>
+		{#if data.page.sections.length > 1}
+			<aside>
+				<nav>
+					<h2>In this article</h2>
+					<NavigationList {direction} tag="ol">
+						{#each data.page.sections as section}
+							{#if section.title && section.slug}
+								<li>
+									<a
+										href={`#${section.slug}`}
+										aria-current={active === section.slug ? 'location' : undefined}
+										>{section.title}</a
+									>
+								</li>
+							{/if}
+						{/each}
+					</NavigationList>
+				</nav>
+			</aside>
+		{/if}
+	</article>
 {/key}
+
 <style>
 	header {
 		display: flex;
@@ -162,7 +166,7 @@
 			margin-top: 2rem;
 		}
 	}
-	
+
 	@media (min-width: 73rem) {
 		aside {
 			display: block;
@@ -175,6 +179,4 @@
 			grid-template-columns: auto var(--aside-width);
 		}
 	}
-
-	
 </style>
