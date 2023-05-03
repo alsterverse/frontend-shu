@@ -2,10 +2,10 @@
 	import { overflow_ratio } from '$lib/actions/overflow_ratio';
 
 	export let tag: 'ul' | 'ol' = 'ul';
-
+	export let direction: "up" | "down";
 	let start_ratio = 0;
 	let end_ratio = 0;
-
+	
 	function handle_ratios(event: CustomEvent<number>) {
 		if (event.type === 'startoverflowratio') {
 			start_ratio = event.detail;
@@ -18,6 +18,7 @@
 <div style="--start-ratio: {start_ratio}; --end-ratio: {end_ratio}">
 	<svelte:element
 		this={tag}
+		class:up={direction === "up"}
 		use:overflow_ratio
 		on:startoverflowratio={handle_ratios}
 		on:endoverflowratio={handle_ratios}
@@ -57,6 +58,9 @@
 
 	ul,
 	ol {
+		--origin-in: top;
+		--origin-out: bottom;
+
 		display: flex;
 		flex-direction: column;
 		padding: 0;
@@ -65,6 +69,12 @@
 		font-size: 1rem;
 		overflow: auto;
 		max-height: calc(100vh - (2 * var(--header-height)));
+	}
+
+	ul.up,
+	ol.up { 
+		--origin-in: bottom;
+		--origin-out: top;
 	}
 
 	ul {
@@ -113,16 +123,33 @@
 		bottom: 0;
 		left: 0;
 		content: '';
-		width: 0.25rem;
+		width: .25rem;
+		background-color: var(--theme-panel);
+		background-position: bottom;
+		transform: scale(1, 0);
+
+		--duration: 300ms;
+		--delay: 200ms;
+
+
+		transform-origin: var(--origin-out);
+		transition-property: transform, background-color;
+		transition-duration: var(--duration), var(--duration);
+		transition-delay: var(--delay), var(--delay);
+		transition-timing-function: ease-out, ease-out;
 	}
 
-	ol :global(a::before) {
+	/*ol :global(a::before) {
 		background: var(--theme-panel);
-	}
+		transform: scale(0, 1);
+	}*/
 
 	ul :global(a[aria-current='page']::before),
 	ol :global(a[aria-current='location']::before) {
-		background: var(--theme-accent);
+		background-color: var(--theme-accent);
+		transform: scale(1, 1);		
+		transition-delay: var(--delay), var(--delay);
+		transform-origin: var(--origin-in);
 	}
 
 	@media (min-width: 55em) {

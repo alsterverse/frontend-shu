@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { afterNavigate } from '$app/navigation';
 	import { page } from '$app/stores';
 	import '$lib/styles/theme.css';
 	import '$lib/styles/main.css';
@@ -10,16 +11,26 @@
 	import { browser } from '$app/environment';
 
 	export let data;
-</script>
+	let direction: "up" | "down" = "down";
+	
+	afterNavigate(({from, to}) => {
+		let previous_id = from?.params?.slug ?? '';
+		let current_id = to?.params?.slug ?? '';
 
+		const prev_index = data.navigation_items.findIndex((item) => item.slug === previous_id);
+		const current_index = data.navigation_items.findIndex((item) => item.slug === current_id);
+
+		direction =  prev_index > current_index ? "up" : "down";
+	});
+</script>
 <div class="layout">
 	<nav
-		id="wiki-articles"
-		aria-labelledby="menu-button"
-		aria-hidden={browser && !$is_large_screen && !$menu_expanded ? true : undefined}
-		class:interactive={browser}
+	id="wiki-articles"
+	aria-labelledby="menu-button"
+	aria-hidden={browser && !$is_large_screen && !$menu_expanded ? true : undefined}
+	class:interactive={browser}
 	>
-		<NavigationList>
+		<NavigationList direction={direction}>
 			{#each data.navigation_items as item, index}
 				<li>
 					<a

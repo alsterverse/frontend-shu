@@ -18,10 +18,18 @@ export function active_section(node: HTMLElement) {
 
 		if (active && last_active !== active[0]) {
 			const new_active = active[1].ratio > 0 ? active[0] : null;
+			const prev = sections.get(last_active || '');
+			const current = sections.get(new_active || '');
+			let direction = "down";
+
+			if (prev && current) {
+				direction = prev.position > current.position ? "up" : "down";
+			}
+
 			last_active = new_active;
 			node.dispatchEvent(
 				new CustomEvent('activesection', {
-					detail: new_active
+					detail: { active: new_active, direction }
 				})
 			);
 		}
