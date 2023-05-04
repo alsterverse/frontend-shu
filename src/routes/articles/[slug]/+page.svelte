@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { afterNavigate } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { active_section } from '$lib/actions/active-section';
 	import NavigationList from '$lib/components/navigation-list.svelte';
@@ -8,10 +9,12 @@
 
 	let active: string | null = null;
 	let direction: 'up' | 'down' = 'down';
+	let hash_id = '';
 
 	const on_active = (event: CustomEvent<{ active: string; direction: 'up' | 'down' }>) => {
 		active = event.detail.active;
 		direction = event.detail.direction;
+		hash_id = document.location.hash.replace(/^./, "");
 	};
 </script>
 
@@ -35,9 +38,9 @@
 				</div>
 			</header>
 			{#each data.page.sections as section}
-				<section id={section.slug}>
+				<section id={section.slug} class:active-section={section.slug === hash_id}>
 					{#if section.title && section.slug}
-						<h2 id={section.slug}><a href={`#${section.slug}`}>{section.title}</a></h2>
+						<h2><a href={`#${section.slug}`}>{section.title}</a></h2>
 					{/if}
 					{@html section.content}
 				</section>
@@ -71,6 +74,26 @@
 		display: flex;
 		flex-direction: column;
 		container-type: inline-size;
+	}
+
+	.active-section {		
+		outline-style: solid;
+		outline-width: 14px;
+		outline-color: hsla(0, 0%, 42%, 0.2);
+
+		animation: section-focus-animation 340ms ease-in forwards;
+		animation-delay: 350ms;
+		animation-iteration-count: 1;
+	}
+
+	@keyframes section-focus-animation {
+		0% {
+			outline-width: 14px;
+		}
+		
+		100% {
+			outline-width: 0px;
+		}
 	}
 
 	header div {
