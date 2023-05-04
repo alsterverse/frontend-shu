@@ -14,7 +14,7 @@
 	const on_active = (event: CustomEvent<{ active: string; direction: 'up' | 'down' }>) => {
 		active = event.detail.active;
 		direction = event.detail.direction;
-		hash_id = document.location.hash.replace(/^./, "");
+		hash_id = document.location.hash.replace(/^./, '');
 	};
 </script>
 
@@ -76,7 +76,7 @@
 		container-type: inline-size;
 	}
 
-	.active-section {		
+	.active-section {
 		outline-style: solid;
 		outline-width: 14px;
 		outline-color: hsla(0, 0%, 42%, 0.2);
@@ -90,7 +90,7 @@
 		0% {
 			outline-width: 14px;
 		}
-		
+
 		100% {
 			outline-width: 0px;
 		}
