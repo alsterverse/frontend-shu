@@ -110,13 +110,28 @@
 			var(--theme-nav-gradient-end) 100%
 		);
 	}
-
-	ul :global(a[aria-current='page']) {
-		opacity: 0.8;
+		
+	:global(a):hover:not(a[aria-current='page']):not(a[aria-current='location']) {
+		color: var(--theme-fg);
+		background: linear-gradient(-45deg, var(--purple-4), var(--purple-3), var(--purple-2), var(--purple-1), var(--purple-0), var(--pink-0));
+		background-size: 500% 500%;
+		
+		animation: a-gradient-animation 8s ease-in-out infinite;
+		animation-direction: alternate;
+		-webkit-background-clip: text;
+  		-webkit-text-fill-color: transparent;
 	}
 
-	ol :global(a[aria-current='location']) {
-		opacity: 0.8;
+	@keyframes a-gradient-animation {
+		0% {
+			background-position: 100% 0%;
+		}
+		50% {
+			background-position: 0% 50%;
+		}
+		100% {
+			background-position: 100% 0%;
+		}
 	}
 
 	ul :global(a::before),
@@ -137,11 +152,6 @@
 		transition-delay: calc(var(--delay) * 0.5), var(--delay);
 		transition-timing-function: ease-out, ease-out;
 	}
-
-	/*ol :global(a::before) {
-		background: var(--theme-panel);
-		transform: scale(0, 1);
-	}*/
 
 	ul :global(a[aria-current='page']::before),
 	ol :global(a[aria-current='location']::before) {
