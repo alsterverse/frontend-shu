@@ -76,16 +76,21 @@
 	}
 
 	section.active {
+		--outline-color: hsla(0, 0%, 42%, 0.06);
 		outline-style: solid;
 		outline-width: 1rem;
 		outline-offset: 1rem;
-		outline-color: hsla(0, 0%, 42%, 0.1);
+		outline-color: var(--outline-color);
 
 		animation: section-focus-animation 300ms ease-in forwards;
 		animation-delay: 220ms;
 		animation-iteration-count: 1;
 	}
 
+	:global(.dark) section.active {
+		--outline-color: hsla(0, 0%, 42%, 0.2);
+	}
+	
 	@keyframes section-focus-animation {
 		0% {
 			outline-width: 1rem;
