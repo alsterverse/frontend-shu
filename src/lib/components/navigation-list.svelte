@@ -141,8 +141,8 @@
 		}
 	}
 
-	ul :global(a::before),
-	ol :global(a::before) {
+	ul :global(a::after),
+	ol :global(a::after) {
 		position: absolute;
 		top: 0;
 		bottom: 0;
@@ -160,8 +160,8 @@
 		transition-timing-function: ease-out, ease-out;
 	}
 
-	ul :global(a[aria-current='page']::before),
-	ol :global(a[aria-current='location']::before) {
+	ul :global(a[aria-current='page']::after),
+	ol :global(a[aria-current='location']::after) {
 		background-color: var(--theme-accent);
 		transform: scale(1, 1);
 		transition-delay: 0ms, var(--delay);
