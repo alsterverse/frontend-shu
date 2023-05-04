@@ -78,10 +78,10 @@
 	section.active {
 		outline-style: solid;
 		outline-width: 14px;
-		outline-color: hsla(0, 0%, 42%, 0.2);
+		outline-color: hsla(0, 0%, 42%, 0.1);
 
-		animation: section-focus-animation 340ms ease-in forwards;
-		animation-delay: 350ms;
+		animation: section-focus-animation 300ms ease-in forwards;
+		animation-delay: 220ms;
 		animation-iteration-count: 1;
 	}
 
