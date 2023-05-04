@@ -90,7 +90,7 @@
 	:global(.dark) section.active {
 		--outline-color: hsla(0, 0%, 42%, 0.2);
 	}
-	
+
 	@keyframes section-focus-animation {
 		0% {
 			outline-width: 1rem;
