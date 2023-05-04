@@ -8,12 +8,14 @@
 
 	let active: string | null = null;
 	let direction: 'up' | 'down' = 'down';
-	let hash_id = '';
+	let anchored = false;
 
-	const on_active = (event: CustomEvent<{ active: string; direction: 'up' | 'down' }>) => {
+	const on_active = (
+		event: CustomEvent<{ active: string; direction: 'up' | 'down'; anchored: boolean }>
+	) => {
 		active = event.detail.active;
 		direction = event.detail.direction;
-		hash_id = document.location.hash.split('#')[1];
+		anchored = event.detail.anchored;
 	};
 </script>
 
@@ -37,7 +39,7 @@
 				</div>
 			</header>
 			{#each data.page.sections as section}
-				<section id={section.slug} class:active={section.slug === hash_id}>
+				<section id={section.slug} class:active={anchored && section.slug === active}>
 					{#if section.title && section.slug}
 						<h2><a href={`#${section.slug}`}>{section.title}</a></h2>
 					{/if}

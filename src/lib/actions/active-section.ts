@@ -7,7 +7,7 @@ export function active_section(node: HTMLElement) {
 
 	const sections = new Map<Element, { position: number; ratio: number }>();
 
-	const activate = (new_active_section: Element | null) => {
+	const activate = (new_active_section: Element | null, anchored?: boolean) => {
 		if (!new_active_section || current_active_section === new_active_section) {
 			return;
 		}
@@ -20,6 +20,7 @@ export function active_section(node: HTMLElement) {
 			node.dispatchEvent(
 				new CustomEvent('activesection', {
 					detail: {
+						anchored: !!anchored,
 						active,
 						direction:
 							new_section_details.position > current_section_details.position ? 'down' : 'up'
@@ -65,7 +66,7 @@ export function active_section(node: HTMLElement) {
 		anchor_interaction_pending = true;
 		await sleep(100);
 		if (new_active !== current_active_section) {
-			activate(new_active);
+			activate(new_active, true);
 		}
 		anchor_interaction_pending = false;
 	};
