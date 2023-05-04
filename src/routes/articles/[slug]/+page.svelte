@@ -13,7 +13,7 @@
 	const on_active = (event: CustomEvent<{ active: string; direction: 'up' | 'down' }>) => {
 		active = event.detail.active;
 		direction = event.detail.direction;
-		hash_id = document.location.hash.replace(/^./, '');
+		hash_id = document.location.hash.split("#")[1]
 	};
 </script>
 
