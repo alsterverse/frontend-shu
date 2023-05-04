@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { afterNavigate } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { active_section } from '$lib/actions/active-section';
 	import NavigationList from '$lib/components/navigation-list.svelte';
