@@ -1,8 +1,10 @@
 <script lang="ts">
+	import { afterNavigate } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { active_section } from '$lib/actions/active-section';
 	import NavigationList from '$lib/components/navigation-list.svelte';
 	import '$lib/styles/code.css';
+	import { sleep } from '$lib/utils';
 
 	export let data;
 
@@ -17,6 +19,16 @@
 		direction = event.detail.direction;
 		anchored = event.detail.anchored;
 	};
+
+	afterNavigate(async (navigation) => {
+		const deeplink = navigation.to?.url.hash.split('#')[1];
+		if (deeplink) {
+			await sleep(100);
+			active = deeplink;
+			direction = 'down';
+			anchored = true;
+		}
+	});
 </script>
 
 <svelte:head>
