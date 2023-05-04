@@ -97,6 +97,7 @@ export function active_section(node: HTMLElement) {
 			sections.forEach((_, section) => {
 				document.querySelectorAll(`a[href="#${section.id}"]`).forEach((anchor) => {
 					anchor.removeEventListener('click', on_anchor);
+					anchor.removeEventListener('keydown', on_anchor);
 				});
 			});
 		}
