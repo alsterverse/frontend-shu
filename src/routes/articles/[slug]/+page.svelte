@@ -38,7 +38,7 @@
 				</div>
 			</header>
 			{#each data.page.sections as section}
-				<section id={section.slug} class:active-section={section.slug === hash_id}>
+				<section id={section.slug} class:active={section.slug === hash_id}>
 					{#if section.title && section.slug}
 						<h2><a href={`#${section.slug}`}>{section.title}</a></h2>
 					{/if}
@@ -76,7 +76,7 @@
 		container-type: inline-size;
 	}
 
-	.active-section {
+	section.active {
 		outline-style: solid;
 		outline-width: 14px;
 		outline-color: hsla(0, 0%, 42%, 0.2);
