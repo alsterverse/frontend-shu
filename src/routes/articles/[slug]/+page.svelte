@@ -77,8 +77,8 @@
 
 	section.active {
 		outline-style: solid;
-		outline-width: 16px;
-		outline-offset: 16px;
+		outline-width: 1rem;
+		outline-offset: 1rem;
 		outline-color: hsla(0, 0%, 42%, 0.1);
 
 		animation: section-focus-animation 300ms ease-in forwards;
@@ -88,7 +88,7 @@
 
 	@keyframes section-focus-animation {
 		0% {
-			outline-width: 14px;
+			outline-width: 1rem;
 		}
 
 		100% {
