@@ -119,12 +119,11 @@
 			var(--purple-3),
 			var(--purple-2),
 			var(--purple-1),
-			var(--purple-0),
 			var(--pink-0)
 		);
-		background-size: 500% 500%;
+		background-size: 400% 400%;
 
-		animation: a-gradient-animation 8s ease-in-out infinite;
+		animation: a-gradient-animation 4s ease-in-out infinite;
 		animation-direction: alternate;
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
