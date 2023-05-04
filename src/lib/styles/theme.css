@@ -17,8 +17,13 @@
 	--neutral-gradient-start: hsl(0 0% 97%);
 	--neutral-gradient-end: var(--neutral-2);
 
-	--purple-1: hsla(278, 79%, 58%, 1);
-	--purple-2: hsla(279, 52%, 64%, 1);
+	--pink-0: hsl(337, 78%, 57%);
+
+	--purple-0: hsl(278, 79%, 38%);
+	--purple-1: hsl(278, 79%, 58%);
+	--purple-2: hsl(279, 52%, 64%);
+	--purple-3: hsl(279, 100%, 80%);
+	--purple-4: hsl(279, 100%, 96%);
 }
 
 :root {
