@@ -168,6 +168,11 @@
 		transform-origin: var(--origin-in);
 	}
 
+	ul :global(a[aria-current='page']),
+	ol :global(a[aria-current='location']) {
+		color: var(--theme-body);
+	}
+
 	@media (min-width: 55em) {
 		ul,
 		ol {
