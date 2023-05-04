@@ -110,16 +110,24 @@
 			var(--theme-nav-gradient-end) 100%
 		);
 	}
-		
+
 	:global(a):hover:not(a[aria-current='page']):not(a[aria-current='location']) {
 		color: var(--theme-fg);
-		background: linear-gradient(-45deg, var(--purple-4), var(--purple-3), var(--purple-2), var(--purple-1), var(--purple-0), var(--pink-0));
+		background: linear-gradient(
+			-45deg,
+			var(--purple-4),
+			var(--purple-3),
+			var(--purple-2),
+			var(--purple-1),
+			var(--purple-0),
+			var(--pink-0)
+		);
 		background-size: 500% 500%;
-		
+
 		animation: a-gradient-animation 8s ease-in-out infinite;
 		animation-direction: alternate;
 		-webkit-background-clip: text;
-  		-webkit-text-fill-color: transparent;
+		-webkit-text-fill-color: transparent;
 	}
 
 	@keyframes a-gradient-animation {
