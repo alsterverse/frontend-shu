@@ -1,18 +1,34 @@
 <script lang="ts">
+	import { afterNavigate } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { active_section } from '$lib/actions/active-section';
 	import NavigationList from '$lib/components/navigation-list.svelte';
 	import '$lib/styles/code.css';
+	import { sleep } from '$lib/utils';
 
 	export let data;
 
 	let active: string | null = null;
 	let direction: 'up' | 'down' = 'down';
+	let anchored = false;
 
-	const on_active = (event: CustomEvent<{ active: string; direction: 'up' | 'down' }>) => {
+	const on_active = (
+		event: CustomEvent<{ active: string; direction: 'up' | 'down'; anchored: boolean }>
+	) => {
 		active = event.detail.active;
 		direction = event.detail.direction;
+		anchored = event.detail.anchored;
 	};
+
+	afterNavigate(async (navigation) => {
+		const deeplink = navigation.to?.url.hash.split('#')[1];
+		if (deeplink) {
+			await sleep(100);
+			active = deeplink;
+			direction = 'down';
+			anchored = true;
+		}
+	});
 </script>
 
 <svelte:head>
@@ -35,9 +51,9 @@
 				</div>
 			</header>
 			{#each data.page.sections as section}
-				<section id={section.slug}>
+				<section id={section.slug} class:active={anchored && section.slug === active}>
 					{#if section.title && section.slug}
-						<h2 id={section.slug}><a href={`#${section.slug}`}>{section.title}</a></h2>
+						<h2><a href={`#${section.slug}`}>{section.title}</a></h2>
 					{/if}
 					{@html section.content}
 				</section>
@@ -71,6 +87,32 @@
 		display: flex;
 		flex-direction: column;
 		container-type: inline-size;
+	}
+
+	section.active {
+		--outline-color: hsla(0, 0%, 42%, 0.06);
+		outline-style: solid;
+		outline-width: 1rem;
+		outline-offset: 1rem;
+		outline-color: var(--outline-color);
+
+		animation: section-focus-animation 300ms ease-in forwards;
+		animation-delay: 220ms;
+		animation-iteration-count: 1;
+	}
+
+	:global(.dark) section.active {
+		--outline-color: hsla(0, 0%, 42%, 0.2);
+	}
+
+	@keyframes section-focus-animation {
+		0% {
+			outline-width: 1rem;
+		}
+
+		100% {
+			outline-width: 0px;
+		}
 	}
 
 	header div {

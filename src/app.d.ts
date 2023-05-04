@@ -10,14 +10,14 @@ declare global {
 	namespace svelteHTML {
 		interface HTMLAttributes<T> {
 			'on:activesection'?: (
-				event: CustomEvent<{ active: string; direction: 'up' | 'down' }>
+				event: CustomEvent<{ active: string; direction: 'up' | 'down'; anchored: boolean }>
 			) => void;
 			'on:startoverflowratio'?: (event: CustomEvent<number>) => void;
 			'on:endoverflowratio'?: (event: CustomEvent<number>) => void;
 		}
 		interface DOMAttributes<T> {
 			'on:activesection'?: (
-				event: CustomEvent<{ active: string; direction: 'up' | 'down' }>
+				event: CustomEvent<{ active: string; direction: 'up' | 'down'; anchored: boolean }>
 			) => void;
 			'on:startoverflowratio'?: (event: CustomEvent<number>) => void;
 			'on:endoverflowratio'?: (event: CustomEvent<number>) => void;
