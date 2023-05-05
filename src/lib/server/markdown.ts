@@ -1,6 +1,6 @@
 import { toHtml } from 'hast-util-to-html';
 import { fromMarkdown } from 'mdast-util-from-markdown';
-import type { Code, Content, Heading, PhrasingContent } from 'mdast-util-from-markdown/lib';
+import type { Code, Content, Heading, Image, PhrasingContent } from 'mdast-util-from-markdown/lib';
 import { gfmFromMarkdown } from 'mdast-util-gfm';
 import { toHast } from 'mdast-util-to-hast';
 import { gfm } from 'micromark-extension-gfm';
@@ -30,12 +30,22 @@ function transform_wiki_links<T extends Content>(content: T): T {
 	return content;
 }
 
+function transform_paragraphs_with_only_image<T extends Content>(content: T): T {
+	if (content.type === 'paragraph') {
+		if (content.children.length === 1 && content.children[0].type === 'image') {
+			content.data = { ...content.data, hName: 'figure' };
+		}
+	}
+	return content;
+}
+
 export function mdast_from_markdown(raw_content: string) {
 	const mdast = fromMarkdown(raw_content, {
 		extensions: [gfm()],
 		mdastExtensions: [gfmFromMarkdown()]
 	});
 	mdast.children = mdast.children.map(transform_wiki_links);
+	mdast.children = mdast.children.map(transform_paragraphs_with_only_image);
 	return mdast;
 }
 

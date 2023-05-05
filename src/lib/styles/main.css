@@ -140,6 +140,23 @@ pre {
 	overflow: scroll;
 }
 
+figure {
+	padding: 0;
+	display: flex;
+	justify-content: center;
+	background-color: var(--theme-card);
+	margin: var(--p-margin-top) 0 0;
+}
+
+img {
+	max-width: 100%;
+}
+
+p img {
+	float: left;
+	margin: 0 var(--p-margin-top) var(--p-margin-top) 0;
+}
+
 @media (min-width: 55em) {
 	h1,
 	h2,
