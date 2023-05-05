@@ -71,6 +71,9 @@
 		font-size: 1rem;
 		overflow: auto;
 		max-height: calc(100vh - (2 * var(--header-height)));
+	}
+
+	ol {
 		box-shadow: inset 4px 0px var(--theme-panel);
 	}
 
@@ -109,36 +112,6 @@
 			var(--theme-nav-gradient-start) -0.09%,
 			var(--theme-nav-gradient-end) 100%
 		);
-	}
-
-	:global(a):hover:not(a[aria-current='page']):not(a[aria-current='location']) {
-		color: var(--theme-fg);
-		background: linear-gradient(
-			-45deg,
-			var(--purple-4),
-			var(--purple-3),
-			var(--purple-2),
-			var(--purple-1),
-			var(--pink-0)
-		);
-		background-size: 400% 400%;
-
-		animation: a-gradient-animation 4s ease-in-out infinite;
-		animation-direction: alternate;
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-	}
-
-	@keyframes a-gradient-animation {
-		0% {
-			background-position: 100% 0%;
-		}
-		50% {
-			background-position: 0% 50%;
-		}
-		100% {
-			background-position: 100% 0%;
-		}
 	}
 
 	ul :global(a::after),
