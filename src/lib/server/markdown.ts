@@ -1,6 +1,6 @@
 import { toHtml } from 'hast-util-to-html';
 import { fromMarkdown } from 'mdast-util-from-markdown';
-import type { Code, Content, Heading, Image, PhrasingContent } from 'mdast-util-from-markdown/lib';
+import type { Code, Content, Heading, PhrasingContent } from 'mdast-util-from-markdown/lib';
 import { gfmFromMarkdown } from 'mdast-util-gfm';
 import { toHast } from 'mdast-util-to-hast';
 import { gfm } from 'micromark-extension-gfm';
