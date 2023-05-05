@@ -24,6 +24,7 @@
 		"eslint-config-prettier": "^8.5.0",
 		"eslint-plugin-svelte3": "^4.0.0",
 		"husky": "^8.0.3",
+		"lint-staged": "^13.2.2",
 		"prettier": "^2.8.0",
 		"prettier-plugin-svelte": "^2.8.1",
 		"svelte": "^3.54.0",
@@ -45,5 +46,8 @@
 		"mkdirp": "^3.0.0",
 		"prismjs": "^1.29.0",
 		"slugify": "^1.6.6"
+	},
+	"lint-staged": {
+		"*.{ts,css,md,svelte,html}": "prettier --write"
 	}
 }
