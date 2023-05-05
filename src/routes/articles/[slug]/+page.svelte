@@ -91,14 +91,12 @@
 
 	section.active {
 		--outline-color: hsla(0, 0%, 42%, 0.06);
+		--outline-offset: 0rem;
+		--outline-width: 1rem;
 		outline-style: solid;
-		outline-width: 1rem;
-		outline-offset: 1rem;
+		outline-width: var(--outline-width);
+		outline-offset: var(--outline-offset);
 		outline-color: var(--outline-color);
-
-		animation: section-focus-animation 300ms ease-in forwards;
-		animation-delay: 220ms;
-		animation-iteration-count: 1;
 	}
 
 	:global(.dark) section.active {
@@ -107,11 +105,11 @@
 
 	@keyframes section-focus-animation {
 		0% {
-			outline-width: 1rem;
+			outline-width: var(--outline-width);
 		}
 
 		100% {
-			outline-width: 0px;
+			outline-width: 0rem;
 		}
 	}
 
@@ -206,6 +204,15 @@
 	@media (min-width: 55em) {
 		header div {
 			margin-top: 2rem;
+		}
+
+		section.active {
+			--outline-width: 1rem;
+			--outline-offset: 1rem;
+
+			animation: section-focus-animation 300ms ease-in forwards;
+			animation-delay: 220ms;
+			animation-iteration-count: 1;
 		}
 	}
 

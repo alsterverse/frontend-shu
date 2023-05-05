@@ -157,6 +157,50 @@ p img {
 	margin: 0 var(--p-margin-top) var(--p-margin-top) 0;
 }
 
+a:hover {
+	--color-stop-0: var(--purple-2);
+	--color-stop-1: var(--purple-1);
+	--color-stop-2: var(--purple-0);
+	--color-stop-3: var(--pink-0);
+
+	background: linear-gradient(
+		-45deg,
+		var(--color-stop-0),
+		var(--color-stop-1),
+		var(--color-stop-2),
+		var(--color-stop-3)
+	);
+	background-size: 400% 400%;
+	animation: a-gradient-animation 4s ease-in-out infinite;
+	animation-direction: alternate;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+.dark a:hover {
+	--color-stop-0: var(--purple-4);
+	--color-stop-1: var(--purple-3);
+	--color-stop-2: var(--purple-2);
+}
+
+.logo,
+.logo:hover {
+	animation: none;
+	background: none;
+}
+
+@keyframes a-gradient-animation {
+	0% {
+		background-position: 100% 0%;
+	}
+	50% {
+		background-position: 0% 50%;
+	}
+	100% {
+		background-position: 100% 0%;
+	}
+}
+
 @media (min-width: 55em) {
 	h1,
 	h2,
@@ -177,7 +221,6 @@ p img {
 		--h4: 1.5rem;
 		--h: 1.25rem;
 		--h-line-height: 1.1;
-
 		--p-margin-top: 1.5rem;
 	}
 }
