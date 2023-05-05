@@ -23,7 +23,11 @@
 
 <style>
 	label {
+		--size-w: calc(var(--hitarea-size) * 2);
+		--size-h: var(--hitarea-size);
+
 		display: flex;
+		position: relative;
 		align-items: center;
 		cursor: pointer;
 		gap: 0.75rem;
@@ -40,6 +44,16 @@
 	}
 	:global(.dark) label {
 		--icon: url(/icons/lightbulb_inverted.svg);
+	}
+
+	label::before {
+		content: '';
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: var(--size-w);
+		height: var(--size-h);
+		transform: translate(-50%, -50%);
 	}
 
 	label::after {
