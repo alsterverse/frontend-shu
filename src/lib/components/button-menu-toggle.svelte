@@ -6,25 +6,33 @@
 
 <button on:click class={clazz}>
 	<span class="block-a" class:on_a={open} class:off_a={!open} />
-
 	<span class="block-b" class:on_b={open} class:off_b={!open} />
 </button>
 
 <style>
 	button {
-		all: unset;
-		display: flex;
-		align-items: end;
 		--a-speed: 300ms;
 		--a-speed-off: 320ms;
 		--a-ease-on: var(--ease-in);
 		--a-ease-off: var(--ease-in);
-
 		--block-size: 0.75em;
 		--block-size-double: calc(var(--block-size) * 2);
 
-		width: 1.5em;
-		height: 1.5em;
+		all: unset;
+		display: flex;
+		align-items: end;
+
+		position: relative;
+	}
+
+	button::after {
+		content: '';
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: var(--hitarea-size);
+		height: var(--hitarea-size);
+		transform: translate(-50%, -50%);
 	}
 
 	span {
