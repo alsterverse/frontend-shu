@@ -70,7 +70,11 @@
 		list-style: none;
 		font-size: 1rem;
 		overflow: auto;
-		max-height: calc(100vh - (2 * var(--header-height)));
+		max-height: 100vh;
+	}
+
+	ul {
+		padding-bottom: calc((2 * var(--header-height)));
 	}
 
 	ol {
