@@ -77,12 +77,12 @@
 	nav {
 		position: static;
 		padding-top: var(--top-gutter);
-
 		background: var(--theme-bg);
 		transform: translateX(0);
-
+		border-right: 0.25rem solid var(--theme-panel);
 		pointer-events: initial;
 		transition: transform 200ms var(--ease-out);
+		transition-delay: 0ms;
 	}
 
 	nav.interactive {
@@ -94,12 +94,11 @@
 		z-index: 5;
 
 		padding-top: 0;
-
-		border-right: 0.25rem solid var(--theme-panel);
 	}
 
 	nav[aria-hidden='true'] {
-		transition: transform 200ms var(--ease-in);
+		transition: transform 150ms var(--ease);
+		transition-delay: 400ms;
 		transform: translateX(-100%);
 		pointer-events: none;
 	}
@@ -114,7 +113,6 @@
 		background-color: var(--theme-panel);
 		backdrop-filter: blur(10px);
 		-webkit-backdrop-filter: blur(10px);
-
 		transition-property: background-color, width;
 		transition-duration: var(--color-transition-duration), 380ms;
 		transition-timing-function: var(--ease) var(--ease-out);
@@ -143,7 +141,7 @@
 	nav[aria-hidden='true'] + menu {
 		width: 4.5rem;
 		transition-duration: var(--color-transition-duration), 300ms;
-		transition-delay: 0ms, 200ms;
+		transition-delay: 0ms, 0ms;
 		transition-timing-function: var(--ease), var(--ease-out);
 	}
 
@@ -152,9 +150,9 @@
 		opacity: 1;
 
 		transition-property: opacity, transform;
-		transition-duration: 100ms;
+		transition-duration: 100ms, 100ms;
 		transition-timing-function: var(--ease) var(--ease);
-		transition-delay: 450ms;
+		transition-delay: 450ms, 500ms;
 	}
 
 	menu :global(.theme-switcher.hidden) {
