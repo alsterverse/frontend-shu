@@ -152,9 +152,9 @@
 		opacity: 1;
 
 		transition-property: opacity, transform;
-		transition-duration: 100ms;
+		transition-duration: 100ms, 100ms;
 		transition-timing-function: var(--ease) var(--ease);
-		transition-delay: 450ms;
+		transition-delay: 450ms, 500ms;
 	}
 
 	menu :global(.theme-switcher.hidden) {
