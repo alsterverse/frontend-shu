@@ -85,8 +85,15 @@
 		height: 1rem;
 		border-radius: 100%;
 		background-color: var(--theme-fg);
-		transition: transform 200ms ease-in-out;
 		transform: translateX(50%);
+
+		transition-property: transform, background-color;
+		transition-duration: 200ms, 200ms;
+		transition-timing-function: ease-in-out;
+	}
+
+	label:hover .switch::before {
+		background-color: var(--theme-accent);
 	}
 
 	input:checked + .switch::before {
