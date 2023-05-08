@@ -92,8 +92,10 @@
 		transition-timing-function: ease-in-out;
 	}
 
-	label:hover .switch::before {
-		background-color: var(--theme-accent);
+	@media (min-width: 55em) {
+		label:hover .switch::before {
+			background-color: var(--theme-accent);
+		}
 	}
 
 	input:checked + .switch::before {
