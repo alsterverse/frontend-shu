@@ -159,7 +159,7 @@ body.dark {
 	background: var(--theme-accent);
 }
 
-:focus:not(:active) {
+:focus-visible {
 	outline-style: solid;
 	outline-offset: -4px;
 	outline-width: 4px;
