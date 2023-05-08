@@ -118,7 +118,7 @@
 		padding-top: 0.5rem;
 		display: flex;
 		justify-content: space-between;
-		align-items: center;
+		align-items: start;
 		border-top: 4px solid var(--theme-stroke);
 		color: var(--theme-body);
 	}
