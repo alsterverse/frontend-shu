@@ -154,6 +154,18 @@ body.dark {
 	--code-highlight-high: var(--rp-highlight-high);
 }
 
+::selection {
+	color: var(--theme-fg);
+	background: var(--theme-accent);
+}
+
+:focus-visible {
+	outline-style: solid;
+	outline-offset: -4px;
+	outline-width: 4px;
+	outline-color: var(--theme-accent);
+}
+
 h1 > a,
 h2 > a,
 h3 > a,
