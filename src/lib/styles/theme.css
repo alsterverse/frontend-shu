@@ -9,7 +9,7 @@
 	--deepblue-gradient-end: var(--deepblue-3);
 
 	--neutral-1: hsla(0, 0%, 98%, 1);
-	--neutral-2: hsla(0, 0%, 92%, 1);
+	--neutral-2: hsla(0, 0%, 87%, 1);
 	--neutral-3: hsla(0, 0%, 85%, 1);
 	--neutral-4: hsla(0, 0%, 70%, 1);
 	--neutral-5: hsla(0, 0%, 42%, 1);
@@ -71,7 +71,7 @@ body.light {
 	--theme-panel: var(--neutral-3);
 	--theme-panel-blur: var(--neutral-blur);
 	--theme-track: var(--neutral-4);
-	--theme-card: var(--neutral-3);
+	--theme-card: var(--neutral-2);
 
 	--code-base: var(--neutral-2);
 	--code-surface: var(--rp-dawn-surface);
