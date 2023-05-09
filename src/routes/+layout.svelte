@@ -81,7 +81,7 @@
 		transform: translateX(0);
 		border-right: 0.25rem solid var(--theme-panel);
 		pointer-events: initial;
-		transition: transform 200ms var(--ease-out);
+		transition: transform 300ms var(--ease-out);
 		transition-delay: 0ms;
 	}
 
@@ -141,7 +141,7 @@
 	nav[aria-hidden='true'] + menu {
 		width: 4.5rem;
 		transition-duration: var(--color-transition-duration), 300ms;
-		transition-delay: 0ms, 0ms;
+		transition-delay: 450ms, 500ms;
 		transition-timing-function: var(--ease), var(--ease-out);
 	}
 
