@@ -76,7 +76,6 @@
 
 	nav {
 		position: static;
-		padding-top: var(--top-gutter);
 		background: var(--theme-bg);
 		transform: translateX(0);
 		border-right: 0.25rem solid var(--theme-panel);
@@ -199,6 +198,26 @@
 			gap: 0 calc(var(--gap-width) * 0.5);
 		}
 
+		nav,
+		nav.interactive {
+			position: static;
+			top: var(--header-height);
+			right: unset;
+			left: unset;
+			grid-area: nav;
+			pointer-events: initial;
+			transition: none;
+			transform: none;
+			max-width: var(--aside-width);
+			background: unset;
+			margin-top: 0;
+		}
+
+		nav :global(> div) {
+			position: sticky;
+			top: calc(var(--header-height));
+		}
+
 		menu,
 		menu.interactive {
 			top: 0;
@@ -221,27 +240,6 @@
 
 		.logo {
 			display: initial;
-		}
-
-		nav,
-		nav.interactive {
-			position: static;
-			top: var(--header-height);
-			right: unset;
-			left: unset;
-			grid-area: nav;
-			pointer-events: initial;
-			transition: none;
-			transform: none;
-			max-width: var(--aside-width);
-			background: unset;
-			padding-top: var(--top-gutter);
-			margin-top: 0;
-		}
-
-		nav :global(> div) {
-			position: sticky;
-			top: calc(var(--header-height) + var(--top-gutter));
 		}
 
 		li:first-child {

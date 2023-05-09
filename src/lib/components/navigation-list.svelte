@@ -75,6 +75,7 @@
 
 	ul {
 		padding-bottom: calc((2 * var(--header-height)));
+		padding-top: var(--top-gutter);
 	}
 
 	ol {
@@ -85,10 +86,6 @@
 	ol.up {
 		--origin-in: bottom;
 		--origin-out: top;
-	}
-
-	ul {
-		padding-top: 2rem;
 	}
 
 	ul :global(a),
@@ -129,7 +126,6 @@
 		background-color: var(--theme-accent);
 		background-position: bottom;
 		transform: scale(1, 0);
-
 		transform-origin: var(--origin-out);
 		transition-property: transform, background-color;
 		transition-duration: var(--duration), var(--duration);
@@ -159,10 +155,6 @@
 		ul,
 		ol {
 			font-size: 0.875rem;
-		}
-
-		ul {
-			padding-top: 0;
 		}
 
 		ul :global(a),
