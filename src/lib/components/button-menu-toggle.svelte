@@ -91,7 +91,7 @@
 			transform: rotate(45deg) translate(0, 0) scale(1, 1);
 		}
 		100% {
-			transform: rotate(22deg) translate(0, 0) scale(1, 1);
+			transform: rotate(22deg) translate(-18%, 0) scale(1, 1);
 		}
 	}
 
@@ -111,17 +111,17 @@
 	}
 
 	@keyframes toggle_off_b {
-		100% {
-			transform: rotate(-22deg);
-		}
-		80% {
-			transform: rotate(-45deg) translate(0, 0) scaleX(1);
+		0% {
+			transform: rotate(-45deg) translate(-30%, -18%) scaleX(0.35);
 		}
 		60% {
 			transform: rotate(-45deg) translate(-30%, -18%) scaleX(0.35);
 		}
-		0% {
-			transform: rotate(-45deg) translate(-30%, -18%) scaleX(0.35);
+		80% {
+			transform: rotate(-45deg) translate(0, 0) scaleX(1);
+		}
+		100% {
+			transform: rotate(-22deg) translate(-4%, 0);
 		}
 	}
 </style>
