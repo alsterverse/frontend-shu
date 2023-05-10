@@ -209,16 +209,27 @@
 			position: relative;
 		}
 
-		h1 a:hover::before,
-		h2 a:hover::before {
+		h1 a::before,
+		h2 a::before {
 			content: '';
 			position: absolute;
-			top: 0.3rem;
+			top: 0.25em;
 			left: var(--icon-link-posiiton-offset-x);
-
 			width: 1rem;
 			height: 1rem;
 			background-image: var(--icon-link);
+			opacity: 0;
+			transform: translateX(2px);
+			transition-property: opacity, transform;
+			transition-duration: 150ms, 150ms;
+			transition-timing-function: var(--ease);
+			pointer-events: none;
+		}
+
+		h1 a:hover::before,
+		h2 a:hover::before {
+			transform: translateX(0);
+			opacity: 1;
 		}
 
 		:global(.dark) h1,
