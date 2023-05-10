@@ -109,7 +109,7 @@
 		right: 0;
 		margin: 0;
 		padding: 0;
-		background-color: var(--theme-panel-blur);
+		background-color: var(--theme-panel);
 		backdrop-filter: blur(10px);
 		-webkit-backdrop-filter: blur(10px);
 		transition-property: background-color, width;
