@@ -213,7 +213,8 @@
 
 		nav :global(> div) {
 			position: sticky;
-			top: calc(var(--header-height));
+			top: var(--header-height);
+			max-height: calc(100vh - var(--header-height));
 		}
 
 		nav :global(ul),
