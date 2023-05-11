@@ -12,7 +12,7 @@
 
 	export let data;
 	let direction: 'up' | 'down' = 'down';
-
+	let should_transition = false;
 	afterNavigate(({ from, to }) => {
 		let previous_id = from?.params?.slug ?? '';
 		let current_id = to?.params?.slug ?? '';
@@ -22,6 +22,11 @@
 
 		direction = prev_index > current_index ? 'up' : 'down';
 	});
+
+	const menu_toggle = () => {
+		if (!should_transition) should_transition = true;
+		menu_expanded.set(!$menu_expanded)();
+	};
 </script>
 
 <menu class:interactive={browser} class:contracted={browser && !$menu_expanded}>
@@ -29,7 +34,7 @@
 		<a href="/" class="logo"><span class="visually-hidden">Home</span></a>
 		<ButtonMenuToggle
 			class={'button-menu-toggle'}
-			on:click={$menu_expanded ? menu_expanded.set(false) : menu_expanded.set(true)}
+			on:click={menu_toggle}
 			open={$menu_expanded && browser}
 		/>
 		{#if browser}
@@ -43,6 +48,7 @@
 		aria-labelledby="menu-button"
 		aria-hidden={browser && !$is_large_screen && !$menu_expanded ? true : undefined}
 		class:interactive={browser}
+		class:transition={should_transition}
 	>
 		<NavigationList {direction}>
 			{#each data.navigation_items as item, index}
@@ -79,9 +85,12 @@
 		transform: translateX(0);
 		border-right: 0.25rem solid var(--theme-panel);
 		pointer-events: initial;
+		z-index: 5;
+	}
+
+	nav.transition {
 		transition: transform 300ms var(--ease-out);
 		transition-delay: 0ms;
-		z-index: 5;
 	}
 
 	nav.interactive {
@@ -90,7 +99,6 @@
 		right: 0;
 		left: 0;
 		bottom: 0;
-
 		padding-top: 0;
 	}
 
@@ -100,9 +108,12 @@
 	}
 
 	nav[aria-hidden='true'] {
-		transition: transform 150ms var(--ease);
 		transform: translateX(-100%);
 		pointer-events: none;
+	}
+
+	nav[aria-hidden='true'].transition {
+		transition: transform 150ms var(--ease);
 	}
 
 	menu {
