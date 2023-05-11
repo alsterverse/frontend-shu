@@ -6,13 +6,15 @@
 	import '$lib/styles/utility.css';
 	import NavigationList from '$lib/components/navigation-list.svelte';
 	import ThemeSwitcher from '$lib/components/theme-switcher.svelte';
-	import { is_large_screen, menu_expanded } from '$lib/app.js';
+	import { is_large_screen, menu_state } from '$lib/app.js';
 	import ButtonMenuToggle from '$lib/components/button-menu-toggle.svelte';
 	import { browser } from '$app/environment';
 
 	export let data;
 	let direction: 'up' | 'down' = 'down';
 	let should_transition = false;
+	let menu_expanded = false;
+
 	afterNavigate(({ from, to }) => {
 		let previous_id = from?.params?.slug ?? '';
 		let current_id = to?.params?.slug ?? '';
@@ -21,24 +23,23 @@
 		const current_index = data.navigation_items.findIndex((item) => item.slug === current_id);
 
 		direction = prev_index > current_index ? 'up' : 'down';
+		if ($menu_state !== 'inactive') menu_state.set('closed');
 	});
 
 	const menu_toggle = () => {
 		if (!should_transition) should_transition = true;
-		menu_expanded.set(!$menu_expanded)();
+		menu_state.set($menu_state === 'open' ? 'closed' : 'open');
 	};
+
+	$: menu_expanded = $menu_state === 'open';
 </script>
 
-<menu class:interactive={browser} class:contracted={browser && !$menu_expanded}>
+<menu class:interactive={browser} class:contracted={browser && !menu_expanded}>
 	<section>
 		<a href="/" class="logo"><span class="visually-hidden">Home</span></a>
-		<ButtonMenuToggle
-			class={'button-menu-toggle'}
-			on:click={menu_toggle}
-			open={$menu_expanded && browser}
-		/>
+		<ButtonMenuToggle class={'button-menu-toggle'} on:click={menu_toggle} state={$menu_state} />
 		{#if browser}
-			<ThemeSwitcher class={`theme-switcher${!$menu_expanded ? ' hidden' : ''}`} />
+			<ThemeSwitcher class={`theme-switcher${!menu_expanded ? ' hidden' : ''}`} />
 		{/if}
 	</section>
 </menu>
@@ -46,7 +47,7 @@
 	<nav
 		id="wiki-articles"
 		aria-labelledby="menu-button"
-		aria-hidden={browser && !$is_large_screen && !$menu_expanded ? true : undefined}
+		aria-hidden={browser && !$is_large_screen && !menu_expanded ? true : undefined}
 		class:interactive={browser}
 		class:transition={should_transition}
 	>
@@ -55,7 +56,6 @@
 				<li>
 					<a
 						href={`${index > 0 ? '/articles' : ''}/${item.slug}`}
-						on:click={menu_expanded.set(false)}
 						aria-current={(!$page.params.slug && item.slug === '') ||
 						$page.params.slug === item.slug
 							? 'page'
@@ -123,10 +123,11 @@
 		bottom: 0;
 		margin: 0;
 		padding: 0;
+		opacity: 0;
 		background-color: var(--theme-panel);
 		backdrop-filter: blur(10px);
 		-webkit-backdrop-filter: blur(10px);
-		transition-property: background-color, width;
+		transition-property: background-color, width, opacity;
 		transition-duration: var(--color-transition-duration), 380ms;
 		transition-timing-function: var(--ease) var(--ease-out);
 		will-change: width;
@@ -138,6 +139,7 @@
 		left: var(--gutter-width);
 		right: var(--gutter-width);
 		top: unset;
+		opacity: 1;
 		width: calc(100% - var(--gutter-width) * 2);
 	}
 
@@ -237,6 +239,7 @@
 
 		menu,
 		menu.interactive {
+			opacity: 1;
 			position: sticky;
 			top: 0;
 			bottom: unset;
