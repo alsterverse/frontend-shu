@@ -24,6 +24,19 @@
 	});
 </script>
 
+<menu class:interactive={browser} class:contracted={browser && !$menu_expanded}>
+	<section>
+		<a href="/" class="logo"><span class="visually-hidden">Home</span></a>
+		<ButtonMenuToggle
+			class={'button-menu-toggle'}
+			on:click={$menu_expanded ? menu_expanded.set(false) : menu_expanded.set(true)}
+			open={$menu_expanded && browser}
+		/>
+		{#if browser}
+			<ThemeSwitcher class={`theme-switcher${!$menu_expanded ? ' hidden' : ''}`} />
+		{/if}
+	</section>
+</menu>
 <div class="layout">
 	<nav
 		id="wiki-articles"
@@ -46,19 +59,6 @@
 			{/each}
 		</NavigationList>
 	</nav>
-	<menu class:interactive={browser}>
-		<section>
-			<a href="/" class="logo"><span class="visually-hidden">Home</span></a>
-			<ButtonMenuToggle
-				class={'button-menu-toggle'}
-				on:click={$menu_expanded ? menu_expanded.set(false) : menu_expanded.set(true)}
-				open={$menu_expanded && browser}
-			/>
-			{#if browser}
-				<ThemeSwitcher class={`theme-switcher${!$menu_expanded ? ' hidden' : ''}`} />
-			{/if}
-		</section>
-	</menu>
 	<main>
 		<slot />
 	</main>
@@ -71,17 +71,17 @@
 		max-width: var(--max-width);
 		margin: 0 auto;
 		padding: 0 var(--gutter-width);
-		height: 100vh;
 	}
 
 	nav {
-		position: static;
+		position: relative;
 		background: var(--theme-bg);
 		transform: translateX(0);
 		border-right: 0.25rem solid var(--theme-panel);
 		pointer-events: initial;
 		transition: transform 300ms var(--ease-out);
 		transition-delay: 0ms;
+		z-index: 5;
 	}
 
 	nav.interactive {
@@ -90,9 +90,13 @@
 		right: 0;
 		left: 0;
 		bottom: 0;
-		z-index: 5;
 
 		padding-top: 0;
+	}
+
+	nav.interactive :global(ul) {
+		padding-bottom: calc((2 * var(--header-height)));
+		padding-top: var(--top-gutter);
 	}
 
 	nav[aria-hidden='true'] {
@@ -102,10 +106,10 @@
 	}
 
 	menu {
-		position: absolute;
+		position: sticky;
+		z-index: 10;
 		top: 0;
-		left: 0;
-		right: 0;
+		bottom: 0;
 		margin: 0;
 		padding: 0;
 		background-color: var(--theme-panel);
@@ -120,11 +124,17 @@
 	menu.interactive {
 		position: fixed;
 		bottom: var(--gutter-width);
-		left: unset;
-		right: unset;
+		left: var(--gutter-width);
+		right: var(--gutter-width);
 		top: unset;
-		z-index: 10;
-		width: calc(100vw - var(--gutter-width) * 2);
+		width: calc(100% - var(--gutter-width) * 2);
+	}
+
+	menu.contracted {
+		width: 4.5rem;
+		transition-duration: var(--color-transition-duration), 300ms;
+		transition-delay: 50ms, 100ms;
+		transition-timing-function: var(--ease), var(--ease-out);
 	}
 
 	section {
@@ -135,13 +145,6 @@
 		margin: 0 auto;
 		padding: 0 1.5rem;
 		height: 4rem;
-	}
-
-	nav[aria-hidden='true'] + menu {
-		width: 4.5rem;
-		transition-duration: var(--color-transition-duration), 300ms;
-		transition-delay: 50ms, 100ms;
-		transition-timing-function: var(--ease), var(--ease-out);
 	}
 
 	menu :global(.theme-switcher) {
@@ -190,7 +193,6 @@
 		.layout {
 			display: grid;
 			grid-template-columns: var(--aside-width) auto;
-			grid-template-rows: var(--header-height) auto;
 			grid-template-areas:
 				'menu menu'
 				'nav main';
@@ -200,9 +202,6 @@
 		nav,
 		nav.interactive {
 			position: static;
-			top: var(--header-height);
-			right: unset;
-			left: unset;
 			grid-area: nav;
 			pointer-events: initial;
 			transition: none;
@@ -217,11 +216,17 @@
 			top: calc(var(--header-height));
 		}
 
+		nav :global(ul),
+		nav.interactive :global(ul) {
+			min-height: calc(100vh - var(--header-height));
+			padding-bottom: calc((2 * var(--header-height)));
+			padding-top: var(--top-gutter);
+		}
+
 		menu,
 		menu.interactive {
+			position: sticky;
 			top: 0;
-			left: 0;
-			right: 0;
 			bottom: unset;
 			grid-area: menu;
 			width: auto;
