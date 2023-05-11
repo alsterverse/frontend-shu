@@ -73,11 +73,6 @@
 		max-height: 100vh;
 	}
 
-	ul {
-		padding-bottom: calc((2 * var(--header-height)));
-		padding-top: var(--top-gutter);
-	}
-
 	ol {
 		box-shadow: inset 4px 0px var(--theme-panel);
 	}
