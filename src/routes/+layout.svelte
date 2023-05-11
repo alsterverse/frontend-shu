@@ -12,7 +12,6 @@
 
 	export let data;
 	let direction: 'up' | 'down' = 'down';
-	let menu_transition_delay_out = '0ms';
 
 	afterNavigate(({ from, to }) => {
 		let previous_id = from?.params?.slug ?? '';
@@ -23,21 +22,9 @@
 
 		direction = prev_index > current_index ? 'up' : 'down';
 	});
-	/*
-		Todo: stäm av med johan om detta är en bra lösning /fj
-	*/
-	const navigate_handler = () => {
-		menu_transition_delay_out = '500ms';
-		menu_expanded.set(false)();
-	};
-
-	const toggle_menu_handler = () => {
-		menu_transition_delay_out = '0ms';
-		menu_expanded.set(!$menu_expanded)();
-	};
 </script>
 
-<div class="layout" style="--menu-transition-delay-out: {menu_transition_delay_out}">
+<div class="layout">
 	<nav
 		id="wiki-articles"
 		aria-labelledby="menu-button"
@@ -49,7 +36,7 @@
 				<li>
 					<a
 						href={`${index > 0 ? '/articles' : ''}/${item.slug}`}
-						on:click={navigate_handler}
+						on:click={menu_expanded.set(false)}
 						aria-current={(!$page.params.slug && item.slug === '') ||
 						$page.params.slug === item.slug
 							? 'page'
@@ -64,7 +51,7 @@
 			<a href="/" class="logo"><span class="visually-hidden">Home</span></a>
 			<ButtonMenuToggle
 				class={'button-menu-toggle'}
-				on:click={toggle_menu_handler}
+				on:click={$menu_expanded ? menu_expanded.set(false) : menu_expanded.set(true)}
 				open={$menu_expanded && browser}
 			/>
 			{#if browser}
@@ -79,7 +66,6 @@
 
 <style>
 	.layout {
-		--menu-transition-delay-out: 0ms;
 		display: flex;
 		flex-direction: column;
 		max-width: var(--max-width);
@@ -111,8 +97,6 @@
 
 	nav[aria-hidden='true'] {
 		transition: transform 150ms var(--ease);
-
-		transition-delay: var(--menu-transition-delay-out);
 		transform: translateX(-100%);
 		pointer-events: none;
 	}
@@ -130,6 +114,7 @@
 		transition-property: background-color, width;
 		transition-duration: var(--color-transition-duration), 380ms;
 		transition-timing-function: var(--ease) var(--ease-out);
+		will-change: width;
 	}
 
 	menu.interactive {
@@ -155,8 +140,7 @@
 	nav[aria-hidden='true'] + menu {
 		width: 4.5rem;
 		transition-duration: var(--color-transition-duration), 300ms;
-		transition-delay: calc(var(--menu-transition-delay-out) + 50ms),
-			calc(var(--menu-transition-delay-out) + 100ms);
+		transition-delay: 50ms, 100ms;
 		transition-timing-function: var(--ease), var(--ease-out);
 	}
 
@@ -174,7 +158,7 @@
 		opacity: 0;
 		transform: translateY(0.125rem);
 		pointer-events: none;
-		transition-delay: var(--menu-transition-delay-out);
+		transition-delay: 0ms, 0ms;
 	}
 
 	.logo {
