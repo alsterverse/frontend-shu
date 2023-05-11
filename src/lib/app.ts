@@ -1,8 +1,8 @@
 import { browser } from '$app/environment';
 import { readable, writable } from 'svelte/store';
 
-function create_menu_expanded() {
-	const { set, subscribe, update } = writable(false);
+function create_menu_state() {
+	const { set, subscribe } = writable<'open' | 'closed' | 'inactive'>('inactive');
 
 	function make_inert(value: boolean) {
 		document.body.classList.toggle('noscroll', value);
@@ -10,28 +10,18 @@ function create_menu_expanded() {
 		if (main) main.inert = value;
 	}
 
-	function set_expanded(expanded: boolean) {
-		return () => {
-			if (!browser) return;
-			make_inert(expanded);
-			set(expanded);
-		};
-	}
-
-	function toggle() {
-		update((expanded) => {
-			make_inert(!expanded);
-			return !expanded;
-		});
+	function set_state(state: 'open' | 'closed') {
+		if (!browser) return;
+		make_inert(state === 'open');
+		set(state);
 	}
 
 	return {
 		subscribe,
-		set: set_expanded,
-		toggle
+		set: set_state
 	};
 }
-export const menu_expanded = create_menu_expanded();
+export const menu_state = create_menu_state();
 
 const matches_large_screen_mq = () => browser && matchMedia('(min-width: 55em)').matches;
 export const is_large_screen = readable(matches_large_screen_mq(), (set) => {

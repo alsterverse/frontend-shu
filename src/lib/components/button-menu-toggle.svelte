@@ -1,12 +1,12 @@
-<script>
+<script lang="ts">
 	let clazz = '';
 	export { clazz as class };
-	export let open = false;
+	export let state: 'closed' | 'open' | 'inactive' = 'inactive';
 </script>
 
 <button on:click class={clazz}>
-	<span class="block-a" class:on_a={open} class:off_a={!open} />
-	<span class="block-b" class:on_b={open} class:off_b={!open} />
+	<span class="block-a" class:on_a={state === 'open'} class:off_a={state === 'closed'} />
+	<span class="block-b" class:on_b={state === 'open'} class:off_b={state === 'closed'} />
 </button>
 
 <style>
@@ -21,7 +21,6 @@
 		all: unset;
 		display: flex;
 		align-items: end;
-
 		position: relative;
 	}
 
@@ -43,10 +42,12 @@
 
 	.block-a {
 		height: var(--block-size);
+		transform: rotate(22deg) translate(-18%, 0) scale(1, 1);
 	}
 
 	.block-b {
 		height: var(--block-size-double);
+		transform: rotate(-22deg) translate(-4%, 0);
 	}
 
 	.on_a {
