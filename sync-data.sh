@@ -27,11 +27,15 @@ cd tmp
 git clone --depth 1 https://github.com/$GITHUB_PROJECT.wiki.git .
 
 # extract metadata and save it in a separate file
-for FILE in *.md; do
+for FILE in $(find . -name '*.md'); do
+	echo "Created meta data for file:" $FILE
 	git log -1 --pretty=format:'%an@%cI' -- $FILE > $FILE.meta
 done
 
 cd ..
+# clear the data directory
+rm -rf $DATA_DIR/*
+
 rm -rf tmp/.git
 mv tmp/* $DATA_DIR 
 
