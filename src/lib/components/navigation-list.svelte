@@ -62,6 +62,7 @@
 		--origin-out: bottom;
 		--duration: 200ms;
 		--delay: 200ms;
+		--indent: 1.5rem;
 
 		display: flex;
 		flex-direction: column;
@@ -84,15 +85,20 @@
 	}
 
 	ul :global(a),
-	ol :global(a) {
+	ol :global(a),
+	ul :global(button) {
 		position: relative;
 		display: inline-block;
-		padding: 1rem 1.5rem;
+		padding-left: var(--indent);
+		padding-top: 1rem;
+		padding-bottom: 1rem;
+		padding-right: 1.5rem;
 		color: var(--theme-fg);
 		text-decoration: none;
 	}
 
-	ul :global(a) {
+	ul :global(a),
+	ul :global(button) {
 		font-weight: 500;
 		width: 100%;
 	}
@@ -102,7 +108,8 @@
 	}
 
 	ul :global(a[aria-current='page']),
-	ol :global(a[aria-current='location']) {
+	ol :global(a[aria-current='location']),
+	ul :global(button[aria-expanded='false']:has(+ ul [aria-current='page'])) {
 		background: linear-gradient(
 			270deg,
 			var(--theme-nav-gradient-start) -0.09%,
@@ -111,7 +118,8 @@
 	}
 
 	ul :global(a::after),
-	ol :global(a::after) {
+	ol :global(a::after),
+	ul :global(button::after) {
 		position: absolute;
 		top: 0;
 		bottom: 0;
@@ -129,7 +137,8 @@
 	}
 
 	ul :global(a[aria-current='page']::after),
-	ol :global(a[aria-current='location']::after) {
+	ol :global(a[aria-current='location']::after),
+	ul :global(button[aria-expanded='false']:has(+ ul [aria-current='page'])::after) {
 		background-color: var(--theme-accent);
 		transform: scale(1, 1);
 		transition-delay: 0ms, var(--delay);
@@ -153,8 +162,10 @@
 		}
 
 		ul :global(a),
-		ol :global(a) {
-			padding: 0.5rem 1.5rem;
+		ol :global(a),
+		ul :global(button) {
+			padding-top: 0.5rem;
+			padding-bottom: 0.5rem;
 		}
 	}
 </style>

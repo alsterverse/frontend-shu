@@ -46,6 +46,10 @@ body {
 	padding: 0;
 }
 
+button {
+	font-family: 'Inter', sans-serif;
+}
+
 b,
 strong {
 	font-weight: 600;

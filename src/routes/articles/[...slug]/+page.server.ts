@@ -4,8 +4,8 @@ import {
 	get_file_edit_url,
 	get_name_from_path,
 	get_all_markdown_paths,
-	to_slug,
-	get_meta
+	get_meta,
+	create_node
 } from '$lib/server/data';
 import type { PageServerLoad } from './$types';
 import { error } from '@sveltejs/kit';
@@ -33,9 +33,9 @@ async function get_page(path: string) {
 }
 
 export const load = (async ({ params }) => {
-	console.log(params.slug);
 	for (const path of get_all_markdown_paths()) {
-		if (to_slug(get_name_from_path(path)) === params.slug) {
+		const node = create_node(path);
+		if (node.slug === params.slug) {
 			return {
 				page: await get_page(path)
 			};

@@ -11,35 +11,31 @@
 	import NavigationNode from './navigation-node.svelte';
 
 	export let data;
+
 	let direction: 'up' | 'down' = 'down';
 	let should_transition = false;
 	let menu_expanded = false;
 
 	afterNavigate(({ from, to }) => {
-		let previous_id = from?.params?.slug ?? '';
-		let current_id = to?.params?.slug ?? '';
+		const prev_index = data.nodes.findIndex((item) => item.slug === from?.params?.slug ?? '');
+		const current_index = data.nodes.findIndex((item) => item.slug === to?.params?.slug ?? '');
 
-		// const prev_index = data.navigation_items.findIndex((item) => item.slug === previous_id);
-		// const current_index = data.navigation_items.findIndex((item) => item.slug === current_id);
-
-		// direction = prev_index > current_index ? 'up' : 'down';
-		// if ($menu_state !== 'inactive') menu_state.set('closed');
+		direction = prev_index > current_index ? 'up' : 'down';
+		if ($menu_state !== 'inactive') menu_state.set('closed');
 	});
 
-	const menu_toggle = () => {
+	const toggle_menu = () => {
 		if (!should_transition) should_transition = true;
 		menu_state.set($menu_state === 'open' ? 'closed' : 'open');
 	};
 
 	$: menu_expanded = $menu_state === 'open';
-
-	$: console.log(data.nodes);
 </script>
 
 <menu class:interactive={browser} class:contracted={browser && !menu_expanded}>
 	<section>
 		<a href="/" class="logo"><span class="visually-hidden">Home</span></a>
-		<ButtonMenuToggle class={'button-menu-toggle'} on:click={menu_toggle} state={$menu_state} />
+		<ButtonMenuToggle class={'button-menu-toggle'} on:click={toggle_menu} state={$menu_state} />
 		{#if browser}
 			<ThemeSwitcher class={`theme-switcher${!menu_expanded ? ' hidden' : ''}`} />
 		{/if}
@@ -48,14 +44,14 @@
 <div class="layout">
 	<nav
 		id="wiki-articles"
-		aria-labelledby="menu-button"
+		aria-labelledby={browser && !is_large_screen ? 'menu-button' : undefined}
 		aria-hidden={browser && !$is_large_screen && !menu_expanded ? true : undefined}
 		class:interactive={browser}
 		class:transition={should_transition}
 	>
 		<NavigationList {direction}>
-			{#each data.nodes as node}
-				<NavigationNode {node} />
+			{#each data.nodes.filter((node) => node.slug.split('/').length === 1) as node}
+				<NavigationNode {node} nodes={data.nodes} />
 			{/each}
 		</NavigationList>
 	</nav>
@@ -96,7 +92,7 @@
 		padding-top: 0;
 	}
 
-	nav.interactive :global(ul) {
+	nav.interactive :global(> div > ul) {
 		padding-bottom: calc((2 * var(--header-height)));
 		padding-top: var(--top-gutter);
 	}
@@ -224,8 +220,8 @@
 			max-height: calc(100vh - var(--header-height));
 		}
 
-		nav :global(ul),
-		nav.interactive :global(ul) {
+		nav :global(> div > ul),
+		nav.interactive :global(> div > ul) {
 			min-height: calc(100vh - var(--header-height));
 			padding-bottom: calc((2 * var(--header-height)));
 			padding-top: var(--top-gutter);
@@ -255,7 +251,7 @@
 			display: initial;
 		}
 
-		li:first-child {
+		nav :global(> div > ul > li:first-child) {
 			font-size: 1.25rem;
 		}
 
