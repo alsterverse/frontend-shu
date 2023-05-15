@@ -46,6 +46,10 @@ body {
 	padding: 0;
 }
 
+button {
+	font-family: 'Inter', sans-serif;
+}
+
 b,
 strong {
 	font-weight: 600;
@@ -158,7 +162,17 @@ p img {
 	margin: 0 var(--p-margin-top) var(--p-margin-top) 0;
 }
 
-a:hover {
+button.link {
+	cursor: pointer;
+	background-color: transparent;
+	border: 0;
+	text-align: left;
+	font-size: inherit;
+	line-height: inherit;
+}
+
+a:hover,
+button.link:hover {
 	--color-stop-0: var(--purple-2);
 	--color-stop-1: var(--purple-1);
 	--color-stop-2: var(--purple-0);
@@ -178,7 +192,8 @@ a:hover {
 	-webkit-text-fill-color: transparent;
 }
 
-.dark a:hover {
+.dark a:hover,
+.dark button.link:hover {
 	--color-stop-0: var(--purple-4);
 	--color-stop-1: var(--purple-3);
 	--color-stop-2: var(--purple-2);
