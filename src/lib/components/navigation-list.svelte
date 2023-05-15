@@ -108,8 +108,7 @@
 	}
 
 	ul :global(a[aria-current='page']),
-	ol :global(a[aria-current='location']),
-	ul :global(button[aria-expanded='false']:has(+ ul [aria-current='page'])) {
+	ol :global(a[aria-current='location']) {
 		background: linear-gradient(
 			270deg,
 			var(--theme-nav-gradient-start) -0.09%,
@@ -137,8 +136,7 @@
 	}
 
 	ul :global(a[aria-current='page']::after),
-	ol :global(a[aria-current='location']::after),
-	ul :global(button[aria-expanded='false']:has(+ ul [aria-current='page'])::after) {
+	ol :global(a[aria-current='location']::after) {
 		background-color: var(--theme-accent);
 		transform: scale(1, 1);
 		transition-delay: 0ms, var(--delay);
@@ -151,11 +149,33 @@
 	}
 
 	ul :global(a[aria-current='page']):hover,
-	ol :global(a[aria-current='location']):hover,
-	ul :global(button[aria-expanded='false']:has(+ ul [aria-current='page'])):hover {
+	ol :global(a[aria-current='location']):hover {
 		animation: none;
 		-webkit-text-fill-color: unset;
 	}
+
+	@supports selector(:has(*)) {
+		ul :global(button[aria-expanded='false']:has(+ ul [aria-current='page'])) {
+			background: linear-gradient(
+				270deg,
+				var(--theme-nav-gradient-start) -0.09%,
+				var(--theme-nav-gradient-end) 100%
+			);
+		}
+
+		ul :global(button[aria-expanded='false']:has(+ ul [aria-current='page'])::after) {
+			background-color: var(--theme-accent);
+			transform: scale(1, 1);
+			transition-delay: 0ms, var(--delay);
+			transform-origin: var(--origin-in);
+		}
+
+		ul :global(button[aria-expanded='false']:has(+ ul [aria-current='page'])):hover {
+			animation: none;
+			-webkit-text-fill-color: unset;
+		}
+	}
+
 	@media (min-width: 55em) {
 		ul,
 		ol {
