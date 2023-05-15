@@ -33,6 +33,7 @@ async function get_page(path: string) {
 }
 
 export const load = (async ({ params }) => {
+	console.log(params.slug);
 	for (const path of get_all_markdown_paths()) {
 		if (to_slug(get_name_from_path(path)) === params.slug) {
 			return {

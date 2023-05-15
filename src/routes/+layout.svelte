@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { afterNavigate } from '$app/navigation';
-	import { page } from '$app/stores';
 	import '$lib/styles/theme.css';
 	import '$lib/styles/main.css';
 	import '$lib/styles/utility.css';
@@ -9,6 +8,7 @@
 	import { is_large_screen, menu_state } from '$lib/app.js';
 	import ButtonMenuToggle from '$lib/components/button-menu-toggle.svelte';
 	import { browser } from '$app/environment';
+	import NavigationNode from './navigation-node.svelte';
 
 	export let data;
 	let direction: 'up' | 'down' = 'down';
@@ -19,11 +19,11 @@
 		let previous_id = from?.params?.slug ?? '';
 		let current_id = to?.params?.slug ?? '';
 
-		const prev_index = data.navigation_items.findIndex((item) => item.slug === previous_id);
-		const current_index = data.navigation_items.findIndex((item) => item.slug === current_id);
+		// const prev_index = data.navigation_items.findIndex((item) => item.slug === previous_id);
+		// const current_index = data.navigation_items.findIndex((item) => item.slug === current_id);
 
-		direction = prev_index > current_index ? 'up' : 'down';
-		if ($menu_state !== 'inactive') menu_state.set('closed');
+		// direction = prev_index > current_index ? 'up' : 'down';
+		// if ($menu_state !== 'inactive') menu_state.set('closed');
 	});
 
 	const menu_toggle = () => {
@@ -32,6 +32,8 @@
 	};
 
 	$: menu_expanded = $menu_state === 'open';
+
+	$: console.log(data.nodes);
 </script>
 
 <menu class:interactive={browser} class:contracted={browser && !menu_expanded}>
@@ -52,16 +54,8 @@
 		class:transition={should_transition}
 	>
 		<NavigationList {direction}>
-			{#each data.navigation_items as item, index}
-				<li>
-					<a
-						href={`${index > 0 ? '/articles' : ''}/${item.slug}`}
-						aria-current={(!$page.params.slug && item.slug === '') ||
-						$page.params.slug === item.slug
-							? 'page'
-							: undefined}>{item.title}</a
-					>
-				</li>
+			{#each data.nodes as node}
+				<NavigationNode {node} />
 			{/each}
 		</NavigationList>
 	</nav>
