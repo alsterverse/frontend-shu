@@ -151,7 +151,8 @@
 	}
 
 	ul :global(a[aria-current='page']):hover,
-	ol :global(a[aria-current='location']):hover {
+	ol :global(a[aria-current='location']):hover,
+	ul :global(button[aria-expanded='false']:has(+ ul [aria-current='page'])):hover {
 		animation: none;
 		-webkit-text-fill-color: unset;
 	}

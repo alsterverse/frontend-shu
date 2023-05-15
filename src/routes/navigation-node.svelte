@@ -41,6 +41,7 @@
 <li style="--lvl: {lvl}">
 	{#if node.children}
 		<button
+			class="link"
 			on:click={toggle}
 			aria-expanded={expanded}
 			aria-controls={node.slug.replaceAll('/', '-')}>{node.title}</button
@@ -75,29 +76,29 @@
 		display: none;
 	}
 
-	button {
-		cursor: pointer;
-		background-color: transparent;
-		border: 0;
-		text-align: left;
-		font-size: inherit;
-		line-height: inherit;
-	}
-
 	button[aria-expanded='true'] {
 		padding-bottom: 0.5rem;
 	}
 
 	button::before {
-		content: '▶';
+		content: '';
 		display: inline-block;
-		width: 1.2rem;
-		font-size: 0.5rem;
-		transform: translateY(-15%);
+		height: 0.5rem;
+		width: 0.5rem;
+		background: linear-gradient(
+			45deg,
+			transparent 0%,
+			transparent 49.999%,
+			var(--theme-fg) 50%,
+			var(--theme-fg) 100%
+		);
+		margin-right: 0.75rem;
+		background-repeat: no-repeat;
+		transform: rotate(45deg) translateX(-25%);
 	}
 
 	button[aria-expanded='true']::before {
-		content: '▼';
+		transform: rotate(135deg) translateX(-50%);
 	}
 
 	button,
