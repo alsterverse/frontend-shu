@@ -23,42 +23,54 @@ function is_directory(path: string) {
 	}
 }
 
-function create_node(path: string): NavigationNode {
-	const file_name = path.split('/').pop() ?? '';
+export function create_node(absolute_path: string): NavigationNode {
+	const relative_path = absolute_path.replace(DIRECTORY, '');
+	const file_name = relative_path.split('/').pop() ?? '';
 	const name = file_name.replace('.md', '');
-	const slug = to_slug(name);
 	const title = decode_name(name);
-	const directories = path.split('/').slice(0, -1);
-	const parent = directories.at(-1) ?? '';
-	let url;
-	if (file_name.endsWith('.md')) {
-		url = name === WIKI_HOME ? '' : `/articles${directories.map(to_slug).join('/')}/${slug}`;
-	}
-	return { slug, title, url, parent, path: path };
+	const directories = relative_path
+		.split('/')
+		.slice(0, -1)
+		.filter((dir) => dir && dir !== '');
+	const slug =
+		name === WIKI_HOME
+			? ''
+			: `${directories.map(to_slug).join('/')}${directories.length ? '/' : ''}${to_slug(name)}`;
+	return { slug, title, name };
 }
 
-function walk_and_create_nodes(dir_path: string) {
+function walk_and_add_nodes(nodes: NavigationNode[], dir_path: string, parent_slug?: string) {
 	const dir_files = readdirSync(dir_path);
-	const n = dir_files.reduce<NavigationNode[]>((nodes, file) => {
+	const parent = nodes.find((n) => n.slug === parent_slug);
+	dir_files.forEach((file) => {
 		const absolute_path = resolve(dir_path, file);
-		const relative_path = absolute_path.replace(DIRECTORY, '');
-		const node = create_node(relative_path);
+		const node = create_node(absolute_path);
 		const is_dir = is_directory(absolute_path);
 
-		if (!is_dir && !file.endsWith('.md')) return nodes;
-
-		if (is_dir) {
-			node.children = walk_and_create_nodes(absolute_path);
-		}
+		if (!is_dir && !file.endsWith('.md')) return;
 
 		nodes.push(node);
-		return nodes;
-	}, []);
-	return n;
+
+		if (parent) {
+			if (!parent.children) parent.children = [];
+			parent.children.push(node.slug);
+		}
+
+		if (is_dir) {
+			walk_and_add_nodes(nodes, absolute_path, node.slug);
+		}
+	});
 }
 
 export function get_nodes() {
-	return walk_and_create_nodes(DIRECTORY);
+	const nodes: NavigationNode[] = [];
+	walk_and_add_nodes(nodes, DIRECTORY);
+	nodes.sort((a, b) => {
+		if (a.name === WIKI_HOME) return -1;
+		if (b.name === WIKI_HOME) return 1;
+		return 0;
+	});
+	return nodes;
 }
 
 export const get_file = (path: string) => readFileSync(path, 'utf-8');
