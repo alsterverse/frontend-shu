@@ -13,8 +13,6 @@
 		expanded = !expanded;
 	};
 
-	$: lvl = node.slug.split('/').length + 1;
-
 	const check_if_expanded = (current_node?: NavigationNode, active_slug?: string): boolean => {
 		if (!active_slug || !current_node) return false;
 
@@ -38,15 +36,13 @@
 	});
 </script>
 
-<li style="--lvl: {lvl}">
+<li style="--lvl: {node.slug.split('/').length + 1}">
 	{#if node.children}
-		<button
-			class="link"
-			on:click={toggle}
-			aria-expanded={expanded}
-			aria-controls={node.slug.replaceAll('/', '-')}>{node.title}</button
+		{@const children_id = `children-${node.slug.replaceAll('/', '-')}`}
+		<button class="link" on:click={toggle} aria-expanded={expanded} aria-controls={children_id}
+			>{node.title}</button
 		>
-		<ul id={node.slug.replaceAll('/', '-')} aria-hidden={expanded ? undefined : true}>
+		<ul id={children_id} aria-hidden={expanded ? undefined : true}>
 			{#each node.children as child_slug}
 				{@const child = nodes.find((node) => node.slug === child_slug)}
 				{#if child}
@@ -86,23 +82,18 @@
 		height: 0.5rem;
 		width: 0.5rem;
 		background: linear-gradient(
-			45deg,
-			transparent 0%,
-			transparent 49.999%,
-			var(--theme-fg) 50%,
-			var(--theme-fg) 100%
-		);
+				45deg,
+				transparent 0%,
+				transparent 49.999%,
+				var(--theme-fg) 50%,
+				var(--theme-fg) 100%
+			)
+			no-repeat;
 		margin-right: 0.75rem;
-		background-repeat: no-repeat;
 		transform: rotate(45deg) translateX(-25%);
 	}
 
 	button[aria-expanded='true']::before {
 		transform: rotate(135deg) translateX(-50%);
-	}
-
-	button,
-	a {
-		padding-left: var(--indent);
 	}
 </style>
