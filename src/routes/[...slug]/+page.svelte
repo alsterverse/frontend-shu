@@ -191,6 +191,11 @@
 			margin-top: 2rem;
 		}
 
+		article {
+			display: grid;
+			grid-template-columns: minmax(1px, 1fr);
+		}
+
 		section.active {
 			--outline-width: 1rem;
 			--outline-offset: 1rem;
@@ -250,9 +255,8 @@
 
 		article {
 			position: relative;
-			display: grid;
 			gap: 0 var(--gap-width);
-			grid-template-columns: auto var(--aside-width);
+			grid-template-columns: minmax(1px, 1fr) var(--aside-width);
 		}
 
 		h1,
