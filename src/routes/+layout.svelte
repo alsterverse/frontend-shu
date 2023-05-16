@@ -45,6 +45,10 @@
 		console.log(event.detail);
 	};
 
+	const on_pending = (event: CustomEvent<boolean>) => {
+		console.log('pending', event.detail);
+	};
+
 	$: menu_expanded = $menu_state === 'open';
 </script>
 
@@ -52,7 +56,13 @@
 	<section>
 		<a href="/" class="logo"><span class="visually-hidden">Home</span></a>
 		<form>
-			<input use:algolia={algolia_options} on:hits={on_hits} type="search" placeholder="Search" />
+			<input
+				use:algolia={algolia_options}
+				on:hits={on_hits}
+				on:pending={on_pending}
+				type="search"
+				placeholder="Search"
+			/>
 		</form>
 		<ButtonMenuToggle class={'button-menu-toggle'} on:click={toggle_menu} state={$menu_state} />
 		{#if browser}

@@ -33,15 +33,19 @@ export function algolia(
 
 	let debounce: ReturnType<typeof setTimeout> | null = null;
 
-	function dispatch(hits: AlgoliaSearchHit[]) {
-		node.dispatchEvent(new CustomEvent('hits', { detail: hits }));
+	function hit_event(hits: AlgoliaSearchHit[]) {
+		return new CustomEvent('hits', { detail: hits });
+	}
+
+	function pending_event(pending: boolean) {
+		return new CustomEvent('pending', { detail: pending });
 	}
 
 	function search(value: string) {
 		return async () => {
-			if (last_value === value) return;
 			const { hits } = await index.search(value);
-			dispatch(hits as AlgoliaSearchHit[]);
+			node.dispatchEvent(pending_event(false));
+			node.dispatchEvent(hit_event(hits as AlgoliaSearchHit[]));
 			last_value = value;
 		};
 	}
@@ -49,9 +53,6 @@ export function algolia(
 	async function init_algoliasearch() {
 		const algolia_module = await import('algoliasearch/lite');
 		algoliasearch = algolia_module.default as unknown as AlgoliaSearch;
-		if (!algoliasearch) {
-			throw new Error('Could not load algoliasearch');
-		}
 		client = algoliasearch(options.app_id, options.api_key);
 		index = client.initIndex(options.index_name);
 	}
@@ -63,6 +64,8 @@ export function algolia(
 	function on_keyup(event: KeyboardEvent) {
 		if (event.target instanceof HTMLInputElement) {
 			if (debounce) clearTimeout(debounce);
+			if (last_value === event.target.value) return;
+			node.dispatchEvent(pending_event(true));
 			debounce = setTimeout(search(event.target.value), 500);
 		}
 	}

@@ -18,6 +18,7 @@ declare global {
 			'on:startoverflowratio'?: (event: CustomEvent<number>) => void;
 			'on:endoverflowratio'?: (event: CustomEvent<number>) => void;
 			'on:hits'?: (event: CustomEvent<AlgoliaSearchHit>) => void;
+			'on:pending'?: (event: CustomEvent<boolean>) => void;
 		}
 		interface DOMAttributes<T> {
 			'on:activesection'?: (
@@ -26,6 +27,7 @@ declare global {
 			'on:startoverflowratio'?: (event: CustomEvent<number>) => void;
 			'on:endoverflowratio'?: (event: CustomEvent<number>) => void;
 			'on:hits'?: (event: CustomEvent<AlgoliaSearchHit>) => void;
+			'on:pending'?: (event: CustomEvent<boolean>) => void;
 		}
 	}
 }
