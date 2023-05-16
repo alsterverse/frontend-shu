@@ -1,5 +1,5 @@
 {
-  "index_name": "algolia_docsearch_action",
+  "index_name": "frontend_docs",
   "start_urls": [
     "https://docs.frontend.alster.se"
   ],
