@@ -1,0 +1,19 @@
+name: Algolia indexer
+
+on:
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  algolia_indexer:
+    runs-on: ubuntu-latest
+    name: test the action
+    steps:
+      - uses: actions/checkout@v2
+      - name: test
+        uses: ./
+        with:
+          algolia_api_key: ${{ secrets.ALGOLIA_API_KEY }}
+          algolia_application_id: ${{ secrets.ALGOLIA_APPLICATION_ID }}
+          # needs to be inside $GITHUB_WORKSPACE from actions/checkout step
+          file: algolia/config.json
