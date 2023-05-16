@@ -10,10 +10,8 @@ jobs:
     name: test the action
     steps:
       - uses: actions/checkout@v3
-      - name: indexer
-        uses: ./
+      - uses: darrenjennings/algolia-docsearch-action@master
         with:
-          algolia_api_key: ${{ secrets.ALGOLIA_API_KEY }}
           algolia_application_id: ${{ secrets.ALGOLIA_APPLICATION_ID }}
-          # needs to be inside $GITHUB_WORKSPACE from actions/checkout step
-          file: algolia/config.json
+          algolia_api_key: ${{ secrets.ALGOLIA_API_KEY }}
+          file: 'algolia/config.json'
