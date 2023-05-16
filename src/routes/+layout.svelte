@@ -9,6 +9,7 @@
 	import ButtonMenuToggle from '$lib/components/button-menu-toggle.svelte';
 	import { browser } from '$app/environment';
 	import NavigationNode from './navigation-node.svelte';
+	import { algolia, type AlgoliaSearchHit } from '$lib/actions/algolia';
 
 	export let data;
 
@@ -29,12 +30,19 @@
 		menu_state.set($menu_state === 'open' ? 'closed' : 'open');
 	};
 
+	const on_hits = (event: CustomEvent<AlgoliaSearchHit>) => {
+		console.log(event.detail);
+	};
+
 	$: menu_expanded = $menu_state === 'open';
 </script>
 
 <menu class:interactive={browser} class:contracted={browser && !menu_expanded}>
 	<section>
 		<a href="/" class="logo"><span class="visually-hidden">Home</span></a>
+		<form>
+			<input use:algolia on:hits={on_hits} type="search" placeholder="Search" />
+		</form>
 		<ButtonMenuToggle class={'button-menu-toggle'} on:click={toggle_menu} state={$menu_state} />
 		{#if browser}
 			<ThemeSwitcher class={`theme-switcher${!menu_expanded ? ' hidden' : ''}`} />
