@@ -1,8 +1,3 @@
-import {
-	PUBLIC_ALGOLIA_API_KEY,
-	PUBLIC_ALGOLIA_APP_ID,
-	PUBLIC_ALGOLIA_INDEX
-} from '$env/static/public';
 import type { AlgoliaSearchOptions, SearchClient, SearchIndex } from 'algoliasearch';
 
 type AlgoliaSearch = (
@@ -27,7 +22,10 @@ export type AlgoliaSearchHit = {
 	url: string;
 };
 
-export function algolia(node: HTMLInputElement) {
+export function algolia(
+	node: HTMLInputElement,
+	options: { app_id: string; api_key: string; index_name: string }
+) {
 	let algoliasearch: AlgoliaSearch | null = null;
 	let client: SearchClient;
 	let index: SearchIndex;
@@ -51,8 +49,8 @@ export function algolia(node: HTMLInputElement) {
 		if (!algoliasearch) {
 			throw new Error('Could not load algoliasearch');
 		}
-		client = algoliasearch(PUBLIC_ALGOLIA_APP_ID, PUBLIC_ALGOLIA_API_KEY);
-		index = client.initIndex(PUBLIC_ALGOLIA_INDEX);
+		client = algoliasearch(options.app_id, options.api_key);
+		index = client.initIndex(options.index_name);
 	}
 
 	function on_focus() {
