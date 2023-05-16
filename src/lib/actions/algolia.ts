@@ -29,6 +29,7 @@ export function algolia(
 	let algoliasearch: AlgoliaSearch | null = null;
 	let client: SearchClient;
 	let index: SearchIndex;
+	let last_value = '';
 
 	let debounce: ReturnType<typeof setTimeout> | null = null;
 
@@ -38,8 +39,10 @@ export function algolia(
 
 	function search(value: string) {
 		return async () => {
+			if (last_value === value) return;
 			const { hits } = await index.search(value);
 			dispatch(hits as AlgoliaSearchHit[]);
+			last_value = value;
 		};
 	}
 
