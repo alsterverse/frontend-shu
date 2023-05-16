@@ -60,7 +60,7 @@ export function algolia(
 		if (!algoliasearch) init_algoliasearch();
 	}
 
-	function on_keyup(event: Event) {
+	function on_keyup(event: KeyboardEvent) {
 		if (event.target instanceof HTMLInputElement) {
 			if (debounce) clearTimeout(debounce);
 			debounce = setTimeout(search(event.target.value), 500);
@@ -73,6 +73,7 @@ export function algolia(
 	return {
 		destroy() {
 			node.removeEventListener('focus', on_focus);
+			node.removeEventListener('keyup', on_keyup);
 		}
 	};
 }
