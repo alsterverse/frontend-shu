@@ -10,8 +10,19 @@
 	import { browser } from '$app/environment';
 	import NavigationNode from './navigation-node.svelte';
 	import { algolia, type AlgoliaSearchHit } from '$lib/actions/algolia';
+	import {
+		PUBLIC_ALGOLIA_API_KEY,
+		PUBLIC_ALGOLIA_APP_ID,
+		PUBLIC_ALGOLIA_INDEX
+	} from '$env/static/public';
 
 	export let data;
+
+	const algolia_options = {
+		app_id: PUBLIC_ALGOLIA_APP_ID,
+		api_key: PUBLIC_ALGOLIA_API_KEY,
+		index_name: PUBLIC_ALGOLIA_INDEX
+	};
 
 	let direction: 'up' | 'down' = 'down';
 	let should_transition = false;
@@ -41,7 +52,7 @@
 	<section>
 		<a href="/" class="logo"><span class="visually-hidden">Home</span></a>
 		<form>
-			<input use:algolia on:hits={on_hits} type="search" placeholder="Search" />
+			<input use:algolia={algolia_options} on:hits={on_hits} type="search" placeholder="Search" />
 		</form>
 		<ButtonMenuToggle class={'button-menu-toggle'} on:click={toggle_menu} state={$menu_state} />
 		{#if browser}
