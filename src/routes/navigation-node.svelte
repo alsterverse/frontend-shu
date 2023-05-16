@@ -56,7 +56,7 @@
 		</ul>
 	{:else}
 		<a
-			href={node.slug === '' ? '/' : `/articles/${node.slug}`}
+			href="/{node.slug}"
 			aria-current={(!$page.params.slug && node.slug === '') || $page.params.slug === node.slug
 				? 'page'
 				: undefined}>{node.title}</a
