@@ -9,20 +9,9 @@
 	import ButtonMenuToggle from '$lib/components/button-menu-toggle.svelte';
 	import { browser } from '$app/environment';
 	import NavigationNode from './navigation-node.svelte';
-	import { algolia, type AlgoliaSearchHit } from '$lib/actions/algolia';
-	import {
-		PUBLIC_ALGOLIA_API_KEY,
-		PUBLIC_ALGOLIA_APP_ID,
-		PUBLIC_ALGOLIA_INDEX
-	} from '$env/static/public';
+	import Search from './search.svelte';
 
 	export let data;
-
-	const algolia_options = {
-		app_id: PUBLIC_ALGOLIA_APP_ID,
-		api_key: PUBLIC_ALGOLIA_API_KEY,
-		index_name: PUBLIC_ALGOLIA_INDEX
-	};
 
 	let direction: 'up' | 'down' = 'down';
 	let should_transition = false;
@@ -41,29 +30,17 @@
 		menu_state.set($menu_state === 'open' ? 'closed' : 'open');
 	};
 
-	const on_hits = (event: CustomEvent<AlgoliaSearchHit>) => {
-		console.log(event.detail);
-	};
-
-	const on_pending = (event: CustomEvent<boolean>) => {
-		console.log('pending', event.detail);
-	};
-
 	$: menu_expanded = $menu_state === 'open';
 </script>
 
 <menu class:interactive={browser} class:contracted={browser && !menu_expanded}>
 	<section>
 		<a href="/" class="logo"><span class="visually-hidden">Home</span></a>
-		<form>
-			<input
-				use:algolia={algolia_options}
-				on:hits={on_hits}
-				on:pending={on_pending}
-				type="search"
-				placeholder="Search"
-			/>
-		</form>
+		{#if browser}
+			<div class="site-search">
+				<Search />
+			</div>
+		{/if}
 		<ButtonMenuToggle class={'button-menu-toggle'} on:click={toggle_menu} state={$menu_state} />
 		{#if browser}
 			<ThemeSwitcher class={`theme-switcher${!menu_expanded ? ' hidden' : ''}`} />
@@ -207,6 +184,11 @@
 	:global(.light) .logo {
 		--logo: url('/logo-alster.svg');
 	}
+
+	.site-search {
+		align-self: flex-start;
+	}
+
 	@media (prefers-color-scheme: dark) {
 		.logo {
 			--logo: url('/logo-alster_inverted.svg');

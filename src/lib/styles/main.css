@@ -46,7 +46,8 @@ body {
 	padding: 0;
 }
 
-button {
+button,
+input {
 	font-family: 'Inter', sans-serif;
 }
 
@@ -172,7 +173,8 @@ button.link {
 }
 
 a:hover,
-button.link:hover {
+button.link:hover,
+li.hit:hover {
 	--color-stop-0: var(--purple-2);
 	--color-stop-1: var(--purple-1);
 	--color-stop-2: var(--purple-0);
