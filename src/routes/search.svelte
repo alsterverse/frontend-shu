@@ -63,16 +63,6 @@
 	let active_index = -1;
 	let direction: 'up' | 'down' = 'down';
 
-	const get_title = (hierarchy: Record<string, string | null>) => {
-		const filtered_hierarchy = Object.values(hierarchy).filter((value) => value !== null);
-		const title = filtered_hierarchy.pop();
-		const breadcrumb = `${filtered_hierarchy.join(
-			' <span class="delimiter">›</span> '
-		)} <span class="delimiter">›</span>`;
-
-		return { title, breadcrumb };
-	};
-
 	const on_hits = (event: CustomEvent<AlgoliaSearchHit[]>) => {
 		hits = event.detail;
 	};
@@ -121,10 +111,17 @@
 		on:mouseleave={reset}
 	>
 		{#each hits as hit}
-			{@const { title, breadcrumb } = get_title(hit.hierarchy)}
+			{@const breadcrumbs = Object.values(hit.hierarchy).filter((value) => value !== null)}
+			{@const title = breadcrumbs.pop()}
 			<li on:mouseenter={on_hover}>
 				<a class="indicator hover" href={hit.url}>
-					<span>{@html breadcrumb}</span>
+					{#if breadcrumbs.length > 0}
+						<ol>
+							{#each breadcrumbs as breadcrumb}
+								<li>{breadcrumb}</li>
+							{/each}
+						</ol>
+					{/if}
 					<h2>{title}</h2>
 					{#if hit.content}
 						{@html hit.content}
@@ -193,12 +190,13 @@
 		padding: 0.5rem 0 0.5rem 2.5rem;
 	}
 
-	span,
+	ol,
 	form :global(p) {
 		color: var(--theme-body);
 	}
 
-	span {
+	ol {
+		list-style: none;
 		display: flex;
 		align-items: center;
 		flex-wrap: wrap;
@@ -207,9 +205,17 @@
 		padding-right: 2.5rem;
 		line-height: 1;
 		margin: 0;
+		padding: 0;
 	}
 
-	span :global(.delimiter) {
+	ol li {
+		display: flex;
+		align-items: center;
+		column-gap: 0.25rem;
+	}
+
+	ol li:after {
+		content: '›';
 		font-size: 1rem;
 		font-weight: 500;
 		line-height: inherit;
