@@ -13,13 +13,28 @@
 			hierarchy: {
 				lvl0: 'Getting Started',
 				lvl1: 'Introduction',
-				lvl2: null,
+				lvl2: 'CSS',
 				lvl3: null,
 				lvl4: null,
 				lvl5: null,
 				lvl6: null
 			},
-			url: '/getting-started/introduction',
+			url: 'https://getting-started/introduction',
+			content: '<p>Introduction to SvelteKit</p>'
+		},
+		{
+			anchor: 'introduction',
+			objectID: '1',
+			hierarchy: {
+				lvl0: 'Getting Started',
+				lvl1: 'Introduction',
+				lvl2: 'Cascading Styles Sheets',
+				lvl3: 'Fredrik',
+				lvl4: 'Johan',
+				lvl5: 'Andreas',
+				lvl6: 'Bacon'
+			},
+			url: 'https://getting-started/introduction',
 			content: '<p>Introduction to SvelteKit</p>'
 		},
 		{
@@ -34,36 +49,26 @@
 				lvl5: null,
 				lvl6: null
 			},
-			url: '/getting-started/introduction',
-			content: '<p>Introduction to SvelteKit</p>'
-		},
-		{
-			anchor: 'introduction',
-			objectID: '1',
-			hierarchy: {
-				lvl0: 'Getting Started',
-				lvl1: 'Introduction',
-				lvl2: null,
-				lvl3: null,
-				lvl4: null,
-				lvl5: null,
-				lvl6: null
-			},
-			url: '/getting-started/introduction',
+			url: 'https://getting-started/introduction',
 			content: '<p>Introduction to SvelteKit</p>'
 		}
 	];
 
 	const algolia_options = {
-		app_id: PUBLIC_ALGOLIA_APP_ID,
-		api_key: PUBLIC_ALGOLIA_API_KEY,
-		index_name: PUBLIC_ALGOLIA_INDEX
+		appID: PUBLIC_ALGOLIA_APP_ID,
+		apiKey: PUBLIC_ALGOLIA_API_KEY,
+		indexName: PUBLIC_ALGOLIA_INDEX
 	};
+
+	let active_index = -1;
+	let direction: 'up' | 'down' = 'down';
 
 	const get_title = (hierarchy: Record<string, string | null>) => {
 		const filtered_hierarchy = Object.values(hierarchy).filter((value) => value !== null);
 		const title = filtered_hierarchy.pop();
-		const breadcrumb = `${filtered_hierarchy.join(' › ')} ›`;
+		const breadcrumb = `${filtered_hierarchy.join(
+			' <span class="delimiter">›</span> '
+		)} <span class="delimiter">›</span>`;
 
 		return { title, breadcrumb };
 	};
@@ -74,6 +79,22 @@
 
 	const on_pending = (event: CustomEvent<boolean>) => {
 		console.log('pending', event.detail);
+	};
+
+	const on_hover = (event: MouseEvent) => {
+		if (event.target instanceof HTMLLIElement) {
+			event.target.parentNode?.childNodes.forEach((node, index) => {
+				if (node === event.target) {
+					direction = index > active_index ? 'down' : 'up';
+					active_index = index;
+				}
+			});
+		}
+	};
+
+	const reset = () => {
+		direction = 'down';
+		active_index = -1;
 	};
 </script>
 
@@ -94,15 +115,21 @@
 		<button>Search</button>
 	</div>
 	<span id="search-description" class="visually-hidden">Results will update as you type</span>
-	<ul aria-hidden={hits.length ? undefined : true}>
+	<ul
+		class="indicator-{direction}"
+		aria-hidden={hits.length ? undefined : true}
+		on:mouseleave={reset}
+	>
 		{#each hits as hit}
 			{@const { title, breadcrumb } = get_title(hit.hierarchy)}
-			<li class="hit">
-				<span>{breadcrumb}</span>
-				<h2><a href={hit.url}>{title}</a></h2>
-				{#if hit.content}
-					{@html hit.content}
-				{/if}
+			<li on:mouseenter={on_hover}>
+				<a class="indicator hover" href={hit.url}>
+					<span>{@html breadcrumb}</span>
+					<h2>{title}</h2>
+					{#if hit.content}
+						{@html hit.content}
+					{/if}
+				</a>
 			</li>
 		{/each}
 	</ul>
@@ -150,19 +177,20 @@
 	form:focus-within ul {
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
 		margin-top: 1.5rem;
-		padding: 0 1.5rem 1.5rem 0;
+		padding: 0 0 2.5rem 0;
 	}
+
 	form:focus-within ul[aria-hidden='true'] {
 		display: none;
 	}
 
-	li {
-		padding: 0.5rem 0 0.5rem 1.75rem;
-	}
-
-	li:hover {
+	a {
+		display: flex;
+		flex-direction: column;
+		color: inherit;
+		text-decoration: none;
+		padding: 0.5rem 0 0.5rem 2.5rem;
 	}
 
 	span,
@@ -171,17 +199,31 @@
 	}
 
 	span {
-		font-size: 0.625rem;
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		column-gap: 0.25rem;
+		font-size: 0.75rem;
+		padding-right: 2.5rem;
+		line-height: 1;
+		margin: 0;
+	}
+
+	span :global(.delimiter) {
+		font-size: 1rem;
+		font-weight: 500;
+		line-height: inherit;
 	}
 
 	form :global(p) {
-		font-size: 0.75rem;
-		margin-top: 0.3rem;
+		font-size: 0.875rem;
+		margin-top: 0.25rem;
 	}
 
 	h2 {
-		margin: 0;
-		font-size: 0.875rem;
+		margin: 0.125rem 0 0;
+		font-size: 1rem;
+		color: var(--theme-fg);
 	}
 
 	input {
