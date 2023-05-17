@@ -22,24 +22,32 @@ export type AlgoliaSearchHit = {
 	url: string;
 };
 
-export function algolia(
-	node: HTMLInputElement,
-	options: { app_id: string; api_key: string; index_name: string }
-) {
+function hit_event(hits: AlgoliaSearchHit[]) {
+	return new CustomEvent('hits', { detail: hits });
+}
+
+function pending_event(pending: boolean) {
+	return new CustomEvent('pending', { detail: pending });
+}
+
+async function load_algolia() {
+	const algolia_module = await import('algoliasearch/lite');
+	return algolia_module.default as unknown as AlgoliaSearch;
+}
+
+type AlgoliaActionOptions = {
+	appID: string;
+	apiKey: string;
+	indexName: string;
+};
+
+export function algolia(node: HTMLInputElement, options: AlgoliaActionOptions) {
 	let algoliasearch: AlgoliaSearch | null = null;
 	let client: SearchClient;
 	let index: SearchIndex;
 	let last_value = '';
 
 	let debounce: ReturnType<typeof setTimeout> | null = null;
-
-	function hit_event(hits: AlgoliaSearchHit[]) {
-		return new CustomEvent('hits', { detail: hits });
-	}
-
-	function pending_event(pending: boolean) {
-		return new CustomEvent('pending', { detail: pending });
-	}
 
 	function search(value: string) {
 		return async () => {
@@ -50,15 +58,15 @@ export function algolia(
 		};
 	}
 
-	async function init_algoliasearch() {
-		const algolia_module = await import('algoliasearch/lite');
-		algoliasearch = algolia_module.default as unknown as AlgoliaSearch;
-		client = algoliasearch(options.app_id, options.api_key);
-		index = client.initIndex(options.index_name);
+	async function init_algoliasearch(app_id: string, api_key: string, index_name: string) {
+		if (client && 'destroy' in client) client.destroy();
+		if (!algoliasearch) algoliasearch = await load_algolia();
+		client = algoliasearch(app_id, api_key);
+		index = client.initIndex(index_name);
 	}
 
 	function on_focus() {
-		if (!algoliasearch) init_algoliasearch();
+		if (!algoliasearch) init_algoliasearch(options.appID, options.apiKey, options.indexName);
 	}
 
 	function on_keyup(event: KeyboardEvent) {
@@ -74,9 +82,13 @@ export function algolia(
 	node.addEventListener('keyup', on_keyup);
 
 	return {
+		update(options: AlgoliaActionOptions) {
+			init_algoliasearch(options.appID, options.apiKey, options.indexName);
+		},
 		destroy() {
 			node.removeEventListener('focus', on_focus);
 			node.removeEventListener('keyup', on_keyup);
+			if (client && 'destroy' in client) client.destroy();
 		}
 	};
 }
