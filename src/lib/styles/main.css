@@ -173,8 +173,7 @@ button.link {
 }
 
 a:hover,
-button.link:hover,
-li.hit:hover {
+button.link:hover {
 	--color-stop-0: var(--purple-2);
 	--color-stop-1: var(--purple-1);
 	--color-stop-2: var(--purple-0);
@@ -192,6 +191,97 @@ li.hit:hover {
 	animation-direction: alternate;
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
+}
+
+.indicator {
+	--duration: 200ms;
+	--delay: 200ms;
+
+	position: relative;
+	display: inline-block;
+	text-decoration: none;
+	color: var(--theme-fg);
+}
+
+.indicator[aria-current='page'],
+.indicator[aria-current='location'],
+.indicator.hover:hover {
+	background: linear-gradient(
+		270deg,
+		var(--theme-nav-gradient-start) -0.09%,
+		var(--theme-nav-gradient-end) 100%
+	);
+}
+
+.indicator::after {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	content: '';
+	width: 0.25rem;
+	background-color: var(--theme-accent);
+	background-position: bottom;
+	transform: scale(1, 0);
+	transform-origin: var(--origin-out);
+	transition-property: transform, background-color;
+	transition-duration: var(--duration), var(--duration);
+	transition-delay: calc(var(--delay) * 0.5), var(--delay);
+	transition-timing-function: ease-out, ease-out;
+}
+
+.indicator[aria-current='page']::after,
+.indicator[aria-current='location']::after,
+.indicator.hover:hover::after {
+	background-color: var(--theme-accent);
+	transform: scale(1, 1);
+	transition-delay: 0ms, var(--delay);
+	transform-origin: var(--origin-in);
+}
+
+.indicator[aria-current='page'],
+.indicator[aria-current='location'],
+.indicator.hover:hover {
+	color: var(--theme-body);
+}
+
+.indicator[aria-current='page']:hover,
+.indicator[aria-current='location']:hover,
+.indicator.hover:hover {
+	animation: none;
+	-webkit-text-fill-color: unset;
+}
+
+.indicator-down {
+	--origin-in: top;
+	--origin-out: bottom;
+}
+
+.indicator-up {
+	--origin-in: bottom;
+	--origin-out: top;
+}
+
+@supports selector(:has(*)) {
+	.indicator[aria-expanded='false']:has(+ ul [aria-current='page']) {
+		background: linear-gradient(
+			270deg,
+			var(--theme-nav-gradient-start) -0.09%,
+			var(--theme-nav-gradient-end) 100%
+		);
+	}
+
+	.indicator[aria-expanded='false']:has(+ ul [aria-current='page'])::after {
+		background-color: var(--theme-accent);
+		transform: scale(1, 1);
+		transition-delay: 0ms, var(--delay);
+		transform-origin: var(--origin-in);
+	}
+
+	.indicator[aria-expanded='false']:has(+ ul [aria-current='page']):hover {
+		animation: none;
+		-webkit-text-fill-color: unset;
+	}
 }
 
 .dark a:hover,

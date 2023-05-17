@@ -68,6 +68,7 @@
 							{#if section.title && section.slug}
 								<li>
 									<a
+										class="indicator"
 										href={`#${section.slug}`}
 										aria-current={active === section.slug ? 'location' : undefined}
 										>{section.title}</a
