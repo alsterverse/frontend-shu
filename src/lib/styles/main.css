@@ -49,6 +49,7 @@ body {
 button,
 input {
 	font-family: 'Inter', sans-serif;
+	letter-spacing: 0.04rem;
 }
 
 b,
