@@ -10,6 +10,7 @@
 	import { browser } from '$app/environment';
 	import NavigationNode from './navigation-node.svelte';
 	import Search from './search.svelte';
+	import { fade } from 'svelte/transition';
 
 	export let data;
 
@@ -37,7 +38,7 @@
 	<section>
 		<a href="/" class="logo"><span class="visually-hidden">Home</span></a>
 		{#if browser}
-			<div class="site-search">
+			<div in:fade class="site-search">
 				<Search />
 			</div>
 		{/if}
