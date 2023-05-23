@@ -1,10 +1,4 @@
-import type { AlgoliaSearchOptions, SearchClient, SearchIndex } from 'algoliasearch';
-
-type AlgoliaSearch = (
-	appId: string,
-	apiKey: string,
-	options?: AlgoliaSearchOptions
-) => SearchClient;
+import type { default as AlgoliaSearch, SearchClient, SearchIndex } from 'algoliasearch/lite';
 
 export type AlgoliaSearchHit = {
 	objectID: string;
@@ -32,26 +26,28 @@ function pending_event(pending: boolean) {
 
 async function load_algolia() {
 	const algolia_module = await import('algoliasearch/lite');
-	return algolia_module.default as unknown as AlgoliaSearch;
+	return algolia_module.default as unknown as typeof AlgoliaSearch;
 }
 
 type AlgoliaActionOptions = {
 	appID: string;
 	apiKey: string;
 	indexName: string;
+	debounceMs?: number;
 };
 
 export function algolia(node: HTMLInputElement, options: AlgoliaActionOptions) {
-	let algoliasearch: AlgoliaSearch | null = null;
-	let client: SearchClient;
-	let index: SearchIndex;
+	let algoliasearch: typeof AlgoliaSearch | null = null;
+	let client: SearchClient | null = null;
+	let index: SearchIndex | null = null;
 	let last_value = '';
 
+	let debounce_ms = options.debounceMs ?? 0;
 	let debounce: ReturnType<typeof setTimeout> | null = null;
 
 	function search(value: string) {
 		return async () => {
-			const { hits } = await index.search(value);
+			const { hits } = (await index?.search(value)) ?? { hits: [] };
 			node.dispatchEvent(pending_event(false));
 			node.dispatchEvent(hit_event(hits as AlgoliaSearchHit[]));
 			last_value = value;
@@ -59,7 +55,6 @@ export function algolia(node: HTMLInputElement, options: AlgoliaActionOptions) {
 	}
 
 	async function init_algoliasearch(app_id: string, api_key: string, index_name: string) {
-		if (client && 'destroy' in client) client.destroy();
 		if (!algoliasearch) algoliasearch = await load_algolia();
 		client = algoliasearch(app_id, api_key);
 		index = client.initIndex(index_name);
@@ -74,7 +69,7 @@ export function algolia(node: HTMLInputElement, options: AlgoliaActionOptions) {
 			if (debounce) clearTimeout(debounce);
 			if (last_value === event.target.value) return;
 			node.dispatchEvent(pending_event(true));
-			debounce = setTimeout(search(event.target.value), 500);
+			debounce = setTimeout(search(event.target.value), debounce_ms);
 		}
 	}
 
@@ -83,12 +78,15 @@ export function algolia(node: HTMLInputElement, options: AlgoliaActionOptions) {
 
 	return {
 		update(options: AlgoliaActionOptions) {
+			debounce_ms = options.debounceMs ?? 0;
 			init_algoliasearch(options.appID, options.apiKey, options.indexName);
 		},
 		destroy() {
 			node.removeEventListener('focus', on_focus);
 			node.removeEventListener('keyup', on_keyup);
-			if (client && 'destroy' in client) client.destroy();
+			algoliasearch = null;
+			client = null;
+			index = null;
 		}
 	};
 }

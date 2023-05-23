@@ -206,7 +206,8 @@ button.link:hover {
 
 .indicator[aria-current='page'],
 .indicator[aria-current='location'],
-.indicator.hover:hover {
+.indicator.hover:hover,
+[aria-selected='true'] .indicator {
 	background: linear-gradient(
 		270deg,
 		var(--theme-nav-gradient-start) -0.09%,
@@ -233,7 +234,8 @@ button.link:hover {
 
 .indicator[aria-current='page']::after,
 .indicator[aria-current='location']::after,
-.indicator.hover:hover::after {
+.indicator.hover:hover::after,
+[aria-selected='true'] .indicator::after {
 	background-color: var(--theme-accent);
 	transform: scale(1, 1);
 	transition-delay: 0ms, var(--delay);
@@ -242,25 +244,55 @@ button.link:hover {
 
 .indicator[aria-current='page'],
 .indicator[aria-current='location'],
-.indicator.hover:hover {
+.indicator.hover:hover,
+[aria-selected='true'] .indicator {
 	color: var(--theme-body);
 }
 
 .indicator[aria-current='page']:hover,
 .indicator[aria-current='location']:hover,
-.indicator.hover:hover {
+.indicator.hover:hover,
+[aria-selected='true'] .indicator:hover {
 	animation: none;
 	-webkit-text-fill-color: unset;
 }
 
-.indicator-down {
+.direction-down {
 	--origin-in: top;
 	--origin-out: bottom;
 }
 
-.indicator-up {
+.direction-up {
 	--origin-in: bottom;
 	--origin-out: top;
+}
+
+.overflow-shadow {
+	position: relative;
+	overflow: hidden;
+}
+
+.overflow-shadow::before,
+.overflow-shadow::after {
+	position: absolute;
+	content: '';
+	display: block;
+	height: 1.5rem;
+	left: 0;
+	right: 0;
+	z-index: 10;
+}
+
+.overflow-shadow::before {
+	top: 0;
+	background: linear-gradient(to bottom, var(--theme-bg) 0%, transparent 100%);
+	transform: translateY(calc((1 - var(--start-overflow-ratio)) * -100%));
+}
+
+.overflow-shadow::after {
+	bottom: 0;
+	background: linear-gradient(to top, var(--theme-bg) 0%, transparent 100%);
+	transform: translateY(calc((1 - var(--end-overflow-ratio)) * 100%));
 }
 
 @supports selector(:has(*)) {

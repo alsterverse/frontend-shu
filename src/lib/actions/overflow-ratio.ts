@@ -1,10 +1,14 @@
-export function overflow_ratio(node: HTMLElement) {
+export function overflowRatio(node: HTMLElement) {
+	const parent = node.parentElement ?? node;
+	let observer: IntersectionObserver | null = null;
 	const threshold = Array(101)
 		.fill(0)
 		.map((_, i) => i / 100);
 
-	let last_start_value = 0;
-	let last_end_value = 0;
+	const state = {
+		start: 0,
+		end: 0
+	};
 
 	const on_intersection = (entries: IntersectionObserverEntry[]) => {
 		entries.forEach((entry) => {
@@ -18,9 +22,8 @@ export function overflow_ratio(node: HTMLElement) {
 					if (start_value === 0) {
 						start_value = 0.0001;
 					}
-					if (start_value !== last_start_value) {
-						last_start_value = start_value;
-						dispatch('start', start_value);
+					if (start_value !== state.start) {
+						update('start', start_value);
 					}
 				} else if (entry.target === node.lastElementChild) {
 					let end_value = 1 - entry.intersectionRatio;
@@ -30,35 +33,50 @@ export function overflow_ratio(node: HTMLElement) {
 					if (end_value === 0) {
 						end_value = 0.0001;
 					}
-					if (end_value !== last_end_value) {
-						last_end_value = end_value;
-						dispatch('end', end_value);
+					if (end_value !== state.end) {
+						update('end', end_value);
 					}
 				}
 			}
 		});
 	};
 
+	function update(id: keyof typeof state, ratio: number) {
+		state[id] = ratio;
+		dispatch(id, ratio);
+		parent.style.setProperty(`--${id}-overflow-ratio`, ratio.toString());
+	}
+
 	const dispatch = (id: string, ratio: number) => {
 		node.dispatchEvent(new CustomEvent(`${id}overflowratio`, { detail: ratio }));
 	};
 
-	const observer = new IntersectionObserver(on_intersection, {
-		threshold,
-		root: node
-	});
+	function init() {
+		observer = new IntersectionObserver(on_intersection, {
+			threshold,
+			root: node
+		});
 
-	const first = node.firstElementChild;
-	const last = node.lastElementChild;
+		const first = node.firstElementChild;
+		const last = node.lastElementChild;
 
-	if (first && last && observer) {
-		observer.observe(first);
-		observer.observe(last);
+		if (first && last && observer) {
+			observer.observe(first);
+			observer.observe(last);
+		}
 	}
 
+	init();
+
 	return {
+		update() {
+			observer?.disconnect();
+			init();
+		},
 		destroy() {
-			if (observer) observer.disconnect();
+			observer?.disconnect();
+			parent.style.removeProperty('--start-overflow-ratio');
+			parent.style.removeProperty('--end-overflow-ratio');
 		}
 	};
 }

@@ -14,15 +14,10 @@
 
 	export let data;
 
-	let direction: 'up' | 'down' = 'down';
 	let should_transition = false;
 	let menu_expanded = false;
 
-	afterNavigate(({ from, to }) => {
-		const prev_index = data.nodes.findIndex((item) => item.slug === from?.params?.slug ?? '');
-		const current_index = data.nodes.findIndex((item) => item.slug === to?.params?.slug ?? '');
-
-		direction = prev_index > current_index ? 'up' : 'down';
+	afterNavigate(() => {
 		if ($menu_state !== 'inactive') menu_state.set('closed');
 	});
 
@@ -56,7 +51,7 @@
 		class:interactive={browser}
 		class:transition={should_transition}
 	>
-		<NavigationList {direction}>
+		<NavigationList>
 			{#each data.nodes.filter((node) => node.slug.split('/').length === 1) as node}
 				<NavigationNode {node} nodes={data.nodes} />
 			{/each}

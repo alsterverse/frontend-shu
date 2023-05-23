@@ -1,61 +1,17 @@
 <script lang="ts">
-	import { overflow_ratio } from '$lib/actions/overflow_ratio';
+	import { overflowRatio } from '$lib/actions/overflow-ratio';
+	import { direction } from '$lib/actions/direction';
 
 	export let tag: 'ul' | 'ol' = 'ul';
-	export let direction: 'up' | 'down';
-	let start_ratio = 0;
-	let end_ratio = 0;
-
-	function handle_ratios(event: CustomEvent<number>) {
-		if (event.type === 'startoverflowratio') {
-			start_ratio = event.detail;
-		} else if (event.type === 'endoverflowratio') {
-			end_ratio = event.detail;
-		}
-	}
 </script>
 
-<div style="--start-ratio: {start_ratio}; --end-ratio: {end_ratio}">
-	<svelte:element
-		this={tag}
-		class="indicator-{direction}"
-		use:overflow_ratio
-		on:startoverflowratio={handle_ratios}
-		on:endoverflowratio={handle_ratios}
-	>
+<div class="overflow-shadow">
+	<svelte:element this={tag} use:overflowRatio use:direction>
 		<slot />
 	</svelte:element>
 </div>
 
 <style>
-	div {
-		position: relative;
-		overflow: hidden;
-	}
-
-	div::before,
-	div::after {
-		position: absolute;
-		content: '';
-		display: block;
-		height: 1.5rem;
-		left: 0;
-		right: 0;
-		z-index: 10;
-	}
-
-	div::before {
-		top: 0;
-		background: linear-gradient(to bottom, var(--theme-bg) 0%, transparent 100%);
-		transform: translateY(calc((1 - var(--start-ratio)) * -100%));
-	}
-
-	div::after {
-		bottom: 0;
-		background: linear-gradient(to top, var(--theme-bg) 0%, transparent 100%);
-		transform: translateY(calc((1 - var(--end-ratio)) * 100%));
-	}
-
 	ul,
 	ol {
 		--indent: 1.5rem;

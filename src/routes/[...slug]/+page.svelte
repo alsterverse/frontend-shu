@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { afterNavigate } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { active_section } from '$lib/actions/active-section';
+	import { activeSection } from '$lib/actions/active-section';
 	import NavigationList from '$lib/components/navigation-list.svelte';
 	import '$lib/styles/code.css';
 	import { sleep } from '$lib/utils';
@@ -9,14 +9,12 @@
 	export let data;
 
 	let active: string | null = null;
-	let direction: 'up' | 'down' = 'down';
 	let anchored = false;
 
 	const on_active = (
 		event: CustomEvent<{ active: string; direction: 'up' | 'down'; anchored: boolean }>
 	) => {
 		active = event.detail.active;
-		direction = event.detail.direction;
 		anchored = event.detail.anchored;
 	};
 
@@ -25,7 +23,6 @@
 		if (deeplink) {
 			await sleep(100);
 			active = deeplink;
-			direction = 'down';
 			anchored = true;
 		}
 	});
@@ -36,7 +33,7 @@
 </svelte:head>
 
 {#key $page.params.slug}
-	<article use:active_section on:activesection={on_active}>
+	<article use:activeSection on:activesection={on_active}>
 		<div class="content">
 			<header>
 				<h1 id="top"><a href="#top">{data.page.title}</a></h1>
@@ -63,7 +60,7 @@
 			<aside>
 				<nav>
 					<h2>In this article</h2>
-					<NavigationList {direction} tag="ol">
+					<NavigationList tag="ol">
 						{#each data.page.sections as section}
 							{#if section.title && section.slug}
 								<li>

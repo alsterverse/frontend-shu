@@ -5,91 +5,53 @@
 		PUBLIC_ALGOLIA_APP_ID,
 		PUBLIC_ALGOLIA_INDEX
 	} from '$env/static/public';
+	import { clamp } from '$lib/utils';
+	import { goto } from '$app/navigation';
+	import { overflowRatio } from '$lib/actions/overflow-ratio';
+	import { keepSelectedInView } from '$lib/actions/keep-selected-in-view';
+	import { direction } from '$lib/actions/direction';
 
-	let hits: AlgoliaSearchHit[] = [
-		{
-			anchor: 'introduction',
-			objectID: '1',
-			hierarchy: {
-				lvl0: 'Getting Started',
-				lvl1: 'Introduction',
-				lvl2: 'CSS',
-				lvl3: null,
-				lvl4: null,
-				lvl5: null,
-				lvl6: null
-			},
-			url: 'https://getting-started/introduction',
-			content: '<p>Introduction to SvelteKit</p>'
-		},
-		{
-			anchor: 'introduction',
-			objectID: '1',
-			hierarchy: {
-				lvl0: 'Getting Started',
-				lvl1: 'Introduction',
-				lvl2: 'Cascading Styles Sheets',
-				lvl3: 'Fredrik',
-				lvl4: 'Johan',
-				lvl5: 'Andreas',
-				lvl6: 'Bacon'
-			},
-			url: 'https://getting-started/introduction',
-			content: '<p>Introduction to SvelteKit</p>'
-		},
-		{
-			anchor: 'introduction',
-			objectID: '1',
-			hierarchy: {
-				lvl0: 'Getting Started',
-				lvl1: 'Introduction',
-				lvl2: null,
-				lvl3: null,
-				lvl4: null,
-				lvl5: null,
-				lvl6: null
-			},
-			url: 'https://getting-started/introduction',
-			content: '<p>Introduction to SvelteKit</p>'
-		}
-	];
+	let hits: AlgoliaSearchHit[] = [];
 
 	const algolia_options = {
 		appID: PUBLIC_ALGOLIA_APP_ID,
 		apiKey: PUBLIC_ALGOLIA_API_KEY,
-		indexName: PUBLIC_ALGOLIA_INDEX
+		indexName: PUBLIC_ALGOLIA_INDEX,
+		debounceMs: 500
 	};
 
-	let active_index = -1;
-	let direction: 'up' | 'down' = 'down';
+	let active_hit_index = 0;
 
-	const on_hits = (event: CustomEvent<AlgoliaSearchHit[]>) => {
+	function on_hits(event: CustomEvent<AlgoliaSearchHit[]>) {
 		hits = event.detail;
-	};
+	}
 
-	const on_pending = (event: CustomEvent<boolean>) => {
+	function on_pending(event: CustomEvent<boolean>) {
 		console.log('pending', event.detail);
-	};
+	}
 
-	const on_hover = (event: MouseEvent) => {
-		if (event.target instanceof HTMLLIElement) {
-			event.target.parentNode?.childNodes.forEach((node, index) => {
-				if (node === event.target) {
-					direction = index > active_index ? 'down' : 'up';
-					active_index = index;
-				}
-			});
+	function on_keydown(event: KeyboardEvent) {
+		if (!hits.length) return;
+		if (event.key === 'Enter') {
+			event.preventDefault();
+			goto(new URL(hits[active_hit_index].url));
+		} else if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+			event.preventDefault();
+			active_hit_index = clamp(
+				active_hit_index + (event.key === 'ArrowUp' ? -1 : 1),
+				0,
+				hits.length - 1
+			);
 		}
-	};
+	}
 
-	const reset = () => {
-		direction = 'down';
-		active_index = -1;
-	};
+	function reset() {
+		active_hit_index = 0;
+	}
 </script>
 
 <form>
-	<div>
+	<div class="filter">
 		<input
 			use:algolia={algolia_options}
 			on:hits={on_hits}
@@ -101,35 +63,37 @@
 			autocorrect="off"
 			autocomplete="off"
 			aria-labelledby="search-description"
+			on:keydown={on_keydown}
 		/>
 		<button>Search</button>
 	</div>
 	<span id="search-description" class="visually-hidden">Results will update as you type</span>
-	<ul
-		class="indicator-{direction}"
-		aria-hidden={hits.length ? undefined : true}
-		on:mouseleave={reset}
-	>
-		{#each hits as hit}
-			{@const breadcrumbs = Object.values(hit.hierarchy).filter((value) => value !== null)}
-			{@const title = breadcrumbs.pop()}
-			<li on:mouseenter={on_hover}>
-				<a class="indicator hover" href={hit.url}>
-					{#if breadcrumbs.length > 0}
-						<ol>
-							{#each breadcrumbs as breadcrumb}
-								<li>{breadcrumb}</li>
-							{/each}
-						</ol>
-					{/if}
-					<h2>{title}</h2>
-					{#if hit.content}
-						{@html hit.content}
-					{/if}
-				</a>
-			</li>
-		{/each}
-	</ul>
+	<div class="overflow-shadow" aria-hidden={hits.length ? undefined : true}>
+		{#if hits.length}
+			<ul on:mouseleave={reset} use:overflowRatio use:keepSelectedInView use:direction>
+				{#each hits as hit, index}
+					{@const breadcrumbs = Object.values(hit.hierarchy).filter((value) => value !== null)}
+					{@const title = breadcrumbs.pop()}
+					{@const url = new URL(hit.url)}
+					<li aria-selected={active_hit_index === index} role="option">
+						<a class="indicator hover" href={url.pathname}>
+							{#if breadcrumbs.length > 0}
+								<ol>
+									{#each breadcrumbs as breadcrumb}
+										<li>{breadcrumb}</li>
+									{/each}
+								</ol>
+							{/if}
+							<h2>{title}</h2>
+							{#if hit.content}
+								<p>{@html hit.content}</p>
+							{/if}
+						</a>
+					</li>
+				{/each}
+			</ul>
+		{/if}
+	</div>
 </form>
 
 <style>
@@ -150,17 +114,17 @@
 		box-shadow: 0px 12px 60px rgba(0, 0, 0, 0.55), 0px 4px 4px rgba(0, 0, 0, 0.2);
 	}
 
-	div {
+	.filter {
 		display: flex;
 		align-items: center;
 		height: var(--header-height);
 		width: 50%;
 	}
 
-	form:focus-within div {
+	form:focus-within .filter {
 		width: 100%;
 		height: auto;
-		padding: 1.5rem 1.5rem 0;
+		padding: 1.5rem;
 	}
 
 	ul {
@@ -169,17 +133,18 @@
 		margin: 0;
 		list-style: none;
 		width: 100%;
+		max-height: min(26rem, 50vh);
+		overflow: auto;
 	}
 
 	form:focus-within ul {
 		display: flex;
 		flex-direction: column;
-		margin-top: 1.5rem;
-		padding: 0 0 2.5rem 0;
+		padding-bottom: 2.5rem;
 	}
 
-	form:focus-within ul[aria-hidden='true'] {
-		display: none;
+	li {
+		scroll-margin: 2rem 0;
 	}
 
 	a {
@@ -187,7 +152,7 @@
 		flex-direction: column;
 		color: inherit;
 		text-decoration: none;
-		padding: 0.5rem 0 0.5rem 2.5rem;
+		padding: 0.5rem 2.5rem 0.5rem 2.5rem;
 	}
 
 	ol,
