@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { overflowRatio } from '$lib/actions/overflow-ratio';
 	import { direction } from '$lib/actions/direction';
+	import { overflow } from '$lib/actions/overflow';
 
 	export let tag: 'ul' | 'ol' = 'ul';
 </script>
 
-<div class="overflow-shadow">
-	<svelte:element this={tag} use:overflowRatio use:direction>
+<div use:overflow>
+	<svelte:element this={tag} use:direction>
 		<slot />
 	</svelte:element>
 </div>

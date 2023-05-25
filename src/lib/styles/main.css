@@ -267,13 +267,13 @@ button.link:hover {
 	--origin-out: top;
 }
 
-.overflow-shadow {
+.overflow {
 	position: relative;
 	overflow: hidden;
 }
 
-.overflow-shadow::before,
-.overflow-shadow::after {
+.overflow::before,
+.overflow::after {
 	position: absolute;
 	content: '';
 	display: block;
@@ -283,15 +283,15 @@ button.link:hover {
 	z-index: 10;
 }
 
-.overflow-shadow::before {
+.overflow::before {
 	top: 0;
-	background: linear-gradient(to bottom, var(--theme-bg) 0%, transparent 100%);
+	background: linear-gradient(to bottom, var(--theme-bg, #000) 0%, transparent 100%);
 	transform: translateY(calc((1 - var(--start-overflow-ratio)) * -100%));
 }
 
-.overflow-shadow::after {
+.overflow::after {
 	bottom: 0;
-	background: linear-gradient(to top, var(--theme-bg) 0%, transparent 100%);
+	background: linear-gradient(to top, var(--theme-bg, #000) 0%, transparent 100%);
 	transform: translateY(calc((1 - var(--end-overflow-ratio)) * 100%));
 }
 

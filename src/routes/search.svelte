@@ -7,9 +7,9 @@
 	} from '$env/static/public';
 	import { clamp } from '$lib/utils';
 	import { goto } from '$app/navigation';
-	import { overflowRatio } from '$lib/actions/overflow-ratio';
 	import { keepSelectedInView } from '$lib/actions/keep-selected-in-view';
 	import { direction } from '$lib/actions/direction';
+	import { overflow } from '$lib/actions/overflow';
 
 	let hits: AlgoliaSearchHit[] = [];
 
@@ -68,9 +68,9 @@
 		<button>Search</button>
 	</div>
 	<span id="search-description" class="visually-hidden">Results will update as you type</span>
-	<div class="overflow-shadow" aria-hidden={hits.length ? undefined : true}>
+	<div use:overflow aria-hidden={hits.length ? undefined : true}>
 		{#if hits.length}
-			<ul on:mouseleave={reset} use:overflowRatio use:keepSelectedInView use:direction>
+			<ul on:mouseleave={reset} use:keepSelectedInView use:direction>
 				{#each hits as hit, index}
 					{@const breadcrumbs = Object.values(hit.hierarchy).filter((value) => value !== null)}
 					{@const title = breadcrumbs.pop()}
