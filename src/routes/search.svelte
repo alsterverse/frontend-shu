@@ -136,7 +136,7 @@
 
 <style>
 	form {
-		--divider-color: var(--theme-bg);
+		--divider-color: var(--theme-track);
 		--bg: var(--theme-card);
 		--input-bg: var(--theme-track);
 		display: flex;
