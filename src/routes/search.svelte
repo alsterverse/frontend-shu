@@ -197,7 +197,7 @@
 	ol li {
 		display: flex;
 		align-items: center;
-		column-gap: 0.25rem;
+		column-gap: 0.125rem;
 		opacity: 0.6;
 	}
 
