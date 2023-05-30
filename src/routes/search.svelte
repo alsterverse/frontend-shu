@@ -11,8 +11,10 @@
 	import { direction } from '$lib/actions/direction';
 	import { overflow } from '$lib/actions/overflow';
 
-	let hits: AlgoliaSearchHit[] = [];
+	export let focus = false;
 
+	let search_input: HTMLInputElement;
+	let hits: AlgoliaSearchHit[] = [];
 	const algolia_options = {
 		appID: PUBLIC_ALGOLIA_APP_ID,
 		apiKey: PUBLIC_ALGOLIA_API_KEY,
@@ -48,6 +50,16 @@
 	function reset() {
 		active_hit_index = 0;
 	}
+
+	function focus_input(event?: MouseEvent) {
+		search_input.focus();
+	}
+
+	$: {
+		if (focus === true) {
+			focus_input();
+		}
+	}
 </script>
 
 <form>
@@ -64,7 +76,10 @@
 			autocomplete="off"
 			aria-labelledby="search-description"
 			on:keydown={on_keydown}
+			bind:this={search_input}
 		/>
+		<!-- svelte-ignore a11y-click-events-have-key-events -->
+		<span class="icon" on:click={focus_input} aria-label="Search" />
 		<button>Search</button>
 	</div>
 	<span id="search-description" class="visually-hidden">Results will update as you type</span>
@@ -98,43 +113,41 @@
 
 <style>
 	form {
+		--divider-color: var(--theme-bg);
+		--bg: var(--theme-card);
+		--input-bg: var(--theme-track);
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		border-radius: 1rem;
-		width: 28rem;
+		width: auto;
 		padding: 0;
-		transition: transform 100ms ease-out, background-color 100ms ease-out;
-		min-height: var(--header-height);
+		background-color: var(--bg);
 	}
 
-	form:focus-within {
-		background-color: var(--theme-card);
-		transform: translateY(1.5rem);
-		box-shadow: 0px 12px 60px rgba(0, 0, 0, 0.55), 0px 4px 4px rgba(0, 0, 0, 0.2);
+	:global(.light) form {
+		--divider-color: var(--theme-stroke);
+		--bg: var(--theme-bg-contrast);
+		--input-bg: var(--theme-track);
 	}
 
 	.filter {
 		display: flex;
 		align-items: center;
+		gap: 1rem;
 		height: var(--header-height);
-		width: 50%;
-	}
-
-	form:focus-within .filter {
 		width: 100%;
-		height: auto;
 		padding: 1.5rem;
+		height: auto;
 	}
 
 	ul {
-		display: none;
 		padding: 0;
 		margin: 0;
 		list-style: none;
 		width: 100%;
-		max-height: min(26rem, 50vh);
+		height: 100%;
 		overflow: auto;
+		display: none;
 	}
 
 	form:focus-within ul {
@@ -147,12 +160,20 @@
 		scroll-margin: 2rem 0;
 	}
 
+	ul > li {
+		border-top: 0.25rem solid var(--divider-color);
+	}
+
+	ul > li:first-child {
+		border: none;
+	}
+
 	a {
 		display: flex;
 		flex-direction: column;
 		color: inherit;
 		text-decoration: none;
-		padding: 0.5rem 2.5rem 0.5rem 2.5rem;
+		padding: 1.5rem 2rem;
 	}
 
 	ol,
@@ -166,7 +187,7 @@
 		align-items: center;
 		flex-wrap: wrap;
 		column-gap: 0.25rem;
-		font-size: 0.75rem;
+		font-size: 0.688rem;
 		padding-right: 2.5rem;
 		line-height: 1;
 		margin: 0;
@@ -177,50 +198,132 @@
 		display: flex;
 		align-items: center;
 		column-gap: 0.25rem;
+		opacity: 0.6;
 	}
 
 	ol li:after {
-		content: '›';
-		font-size: 1rem;
+		content: '/';
+		font-size: 0.75rem;
 		font-weight: 500;
 		line-height: inherit;
 	}
 
 	form :global(p) {
-		font-size: 0.875rem;
-		margin-top: 0.25rem;
+		font-size: 0.813rem;
+		margin-top: 0.5rem;
 	}
 
 	h2 {
-		margin: 0.125rem 0 0;
-		font-size: 1rem;
+		margin: 0.25rem 0 0;
+		font-size: 1.25rem;
 		color: var(--theme-fg);
 	}
 
 	input {
 		border: none;
 		border-radius: 1rem;
-		background-color: var(--theme-track);
+		background-color: var(--input-bg);
 		color: var(--theme-text);
-		font-size: 0.75rem;
-		height: 1.5rem;
+		font-size: 1rem;
 		width: 100%;
+		height: 2.5rem;
 		padding: 0 1rem;
-		transition: all 100ms ease-out;
 	}
 
 	button {
 		display: none;
 	}
 
-	input:hover,
-	input:focus-within {
-		font-size: 0.875rem;
-		border-radius: 0.5rem;
-		height: 2.5rem;
+	.icon {
+		--icon-input: url(/icons/search_inverted.svg);
+		cursor: pointer;
+	}
+
+	:global(.light) .icon {
+		--icon-input: url(/icons/search.svg);
+	}
+
+	form:focus-within .icon {
+		--icon-input: url(/icons/cancel_inverted.svg);
+	}
+
+	:global(.light) form:focus-within .icon {
+		--icon-input: url(/icons/cancel.svg);
+	}
+
+	.icon::after {
+		content: '';
+		display: block;
+		height: 1.25rem;
+		width: 1.25rem;
+		background-repeat: no-repeat;
+		background-size: cover;
+		background-image: var(--icon-input);
 	}
 
 	input:focus-within {
 		outline: none;
+	}
+
+	@media (min-width: 55em) {
+		form {
+			border-radius: 1rem;
+			transition: transform 100ms ease-out, background-color 100ms ease-out;
+			min-height: var(--header-height);
+			width: 38rem;
+			background: none;
+		}
+
+		form:focus-within {
+			--input-bg: var(--theme-bg);
+			background-color: var(--bg);
+			transform: translateY(1.5rem);
+			box-shadow: 0px 12px 60px rgba(0, 0, 0, 0.55), 0px 4px 4px rgba(0, 0, 0, 0.2);
+		}
+
+		.filter {
+			display: flex;
+			align-items: center;
+			height: var(--header-height);
+			width: 60%;
+		}
+
+		form:focus-within .filter {
+			width: 100%;
+			height: auto;
+			padding: 1.5rem;
+		}
+
+		ul {
+			max-height: min(46rem, 60vh);
+		}
+
+		input {
+			font-size: 0.75rem;
+			height: 1.5rem;
+			transition: all 100ms ease-out;
+		}
+
+		form:hover input,
+		form:focus-within input {
+			font-size: 0.875rem;
+			border-radius: 0.5rem;
+			height: 2.5rem;
+		}
+
+		.icon {
+			transition-property: background-color;
+			transition-duration: 200ms;
+			transition-timing-function: ease-in-out;
+		}
+
+		.icon::after {
+			height: 1rem;
+			width: 1rem;
+		}
+
+		.icon:hover {
+			background-color: var(--theme-accent);
+		}
 	}
 </style>
