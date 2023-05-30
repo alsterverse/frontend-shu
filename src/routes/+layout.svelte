@@ -1,16 +1,15 @@
 <script lang="ts">
 	import { afterNavigate } from '$app/navigation';
+
 	import '$lib/styles/theme.css';
 	import '$lib/styles/main.css';
 	import '$lib/styles/utility.css';
 	import NavigationList from '$lib/components/navigation-list.svelte';
-	import ThemeSwitcher from '$lib/components/theme-switcher.svelte';
 	import { is_large_screen, menu_state } from '$lib/app.js';
-	import ButtonMenuToggle from '$lib/components/button-menu-toggle.svelte';
+
 	import { browser } from '$app/environment';
 	import NavigationNode from './navigation-node.svelte';
-	import Search from './search.svelte';
-	import { fade } from 'svelte/transition';
+	import Menu from './menu.svelte';
 
 	export let data;
 
@@ -29,20 +28,7 @@
 	$: menu_expanded = $menu_state === 'open';
 </script>
 
-<menu class:interactive={browser} class:contracted={browser && !menu_expanded}>
-	<section>
-		<a href="/" class="logo"><span class="visually-hidden">Home</span></a>
-		{#if browser}
-			<div in:fade class="site-search">
-				<Search />
-			</div>
-		{/if}
-		<ButtonMenuToggle class={'button-menu-toggle'} on:click={toggle_menu} state={$menu_state} />
-		{#if browser}
-			<ThemeSwitcher class={`theme-switcher${!menu_expanded ? ' hidden' : ''}`} />
-		{/if}
-	</section>
-</menu>
+<Menu {toggle_menu} />
 <div class="layout">
 	<nav
 		id="wiki-articles"
@@ -73,7 +59,7 @@
 
 	nav {
 		position: relative;
-		background: var(--theme-bg);
+		background: var(--theme-bg-contrast);
 		transform: translateX(0);
 		border-right: 0.25rem solid var(--theme-panel);
 		pointer-events: initial;
@@ -106,92 +92,6 @@
 
 	nav[aria-hidden='true'].transition {
 		transition: transform 150ms var(--ease);
-	}
-
-	menu {
-		position: sticky;
-		z-index: 10;
-		top: 0;
-		bottom: 0;
-		margin: 0;
-		padding: 0;
-		opacity: 0;
-		background-color: var(--theme-panel);
-		backdrop-filter: blur(10px);
-		-webkit-backdrop-filter: blur(10px);
-		transition-property: background-color, width, opacity;
-		transition-duration: var(--color-transition-duration), 380ms;
-		transition-timing-function: var(--ease) var(--ease-out);
-		will-change: width;
-	}
-
-	menu.interactive {
-		position: fixed;
-		bottom: var(--gutter-width);
-		left: var(--gutter-width);
-		right: var(--gutter-width);
-		top: unset;
-		opacity: 1;
-		width: calc(100% - var(--gutter-width) * 2);
-	}
-
-	menu.contracted {
-		width: 4.5rem;
-		transition-duration: var(--color-transition-duration), 300ms;
-		transition-delay: 50ms, 100ms;
-		transition-timing-function: var(--ease), var(--ease-out);
-	}
-
-	section {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		max-width: var(--max-width);
-		margin: 0 auto;
-		padding: 0 1.5rem;
-		height: 4rem;
-	}
-
-	menu :global(.theme-switcher) {
-		transform: translateY(0rem);
-		opacity: 1;
-
-		transition-property: opacity, transform;
-		transition-duration: 100ms, 100ms;
-		transition-timing-function: var(--ease) var(--ease);
-		transition-delay: 450ms, 500ms;
-	}
-
-	menu :global(.theme-switcher.hidden) {
-		opacity: 0;
-		transform: translateY(0.125rem);
-		pointer-events: none;
-		transition-delay: 0ms, 0ms;
-	}
-
-	.logo {
-		display: none;
-		width: 1.8125rem;
-		height: 1.5rem;
-		background-image: var(--logo);
-	}
-
-	.logo,
-	:global(.light) .logo {
-		--logo: url('/logo-alster.svg');
-	}
-
-	.site-search {
-		align-self: flex-start;
-	}
-
-	@media (prefers-color-scheme: dark) {
-		.logo {
-			--logo: url('/logo-alster_inverted.svg');
-		}
-	}
-	:global(.dark) .logo {
-		--logo: url('/logo-alster_inverted.svg');
 	}
 
 	main {
@@ -232,30 +132,6 @@
 			min-height: calc(100vh - var(--header-height));
 			padding-bottom: calc((2 * var(--header-height)));
 			padding-top: var(--top-gutter);
-		}
-
-		menu,
-		menu.interactive {
-			opacity: 1;
-			position: sticky;
-			top: 0;
-			bottom: unset;
-			grid-area: menu;
-			width: auto;
-		}
-
-		menu :global(.button-menu-toggle) {
-			display: none;
-		}
-
-		menu :global(.theme-switcher),
-		menu :global(.theme-switcher.hidden) {
-			opacity: 1;
-			pointer-events: all;
-		}
-
-		.logo {
-			display: initial;
 		}
 
 		nav :global(> div > ul > li:first-child) {
