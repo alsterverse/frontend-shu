@@ -154,6 +154,10 @@
 		--input-bg: var(--theme-track);
 	}
 
+	form:focus-within {
+		--input-bg: var(--theme-bg);
+	}
+
 	.filter {
 		display: flex;
 		align-items: center;
@@ -303,7 +307,6 @@
 		}
 
 		form:focus-within {
-			--input-bg: var(--theme-bg);
 			background-color: var(--bg);
 			transform: translateY(1.5rem);
 			box-shadow: 0px 12px 60px rgba(0, 0, 0, 0.55), 0px 4px 4px rgba(0, 0, 0, 0.2);
