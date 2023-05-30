@@ -12,6 +12,10 @@
 		return () => (site_search_visibility_mobile = visibility);
 	};
 
+	function on_search_close() {
+		site_search_visibility_mobile = 'hidden';
+	}
+
 	$: menu_expanded = $menu_state === 'open';
 </script>
 
@@ -21,7 +25,11 @@
 		class="site-search-modal"
 		class:site-search-visible={site_search_visibility_mobile === 'visible'}
 	>
-		<Search focus={site_search_visibility_mobile === 'visible'} />
+		<Search
+			context="device"
+			focus={site_search_visibility_mobile === 'visible'}
+			on:search_close={on_search_close}
+		/>
 	</div>
 {/if}
 <menu
@@ -34,7 +42,7 @@
 		<ButtonMenuToggle class={'button-menu-toggle'} on:click={toggle_menu} state={$menu_state} />
 		{#if browser && $is_large_screen}
 			<div in:fade class="site-search">
-				<Search focus={site_search_visibility_mobile === 'visible'} />
+				<Search />
 			</div>
 			<ThemeSwitcher class={`theme-switcher${!menu_expanded ? ' hidden' : ''}`} />
 		{/if}
@@ -59,11 +67,13 @@
 		left: 0;
 		right: 0;
 		width: 100%;
+
 		z-index: 100;
 	}
 
 	.site-search-visible.site-search-modal {
 		display: unset;
+		height: 100%;
 	}
 
 	menu {

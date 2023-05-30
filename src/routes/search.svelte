@@ -6,15 +6,20 @@
 		PUBLIC_ALGOLIA_INDEX
 	} from '$env/static/public';
 	import { clamp } from '$lib/utils';
-	import { goto } from '$app/navigation';
+	import { afterNavigate, goto } from '$app/navigation';
 	import { keepSelectedInView } from '$lib/actions/keep-selected-in-view';
+	import { createEventDispatcher } from 'svelte';
+
 	import { direction } from '$lib/actions/direction';
 	import { overflow } from '$lib/actions/overflow';
 
 	export let focus = false;
+	export let context: '' | 'device' = '';
 
 	let search_input: HTMLInputElement;
 	let hits: AlgoliaSearchHit[] = [];
+
+	const dispatch = createEventDispatcher();
 	const algolia_options = {
 		appID: PUBLIC_ALGOLIA_APP_ID,
 		apiKey: PUBLIC_ALGOLIA_API_KEY,
@@ -55,9 +60,27 @@
 		search_input.focus();
 	}
 
+	function blur_search(event?: MouseEvent) {
+		dispatch('search_close');
+		window.focus();
+	}
+
+	afterNavigate(() => {
+		blur_search();
+	});
+
+	function handle_icon() {
+		if (focus || context !== 'device') {
+			focus_input();
+		} else {
+			blur_search();
+		}
+	}
+
 	$: {
 		if (focus === true) {
 			focus_input();
+			focus = false;
 		}
 	}
 </script>
@@ -79,11 +102,11 @@
 			bind:this={search_input}
 		/>
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
-		<span class="icon" on:click={focus_input} aria-label="Search" />
+		<span class="icon" on:click={handle_icon} aria-label="Search" />
 		<button>Search</button>
 	</div>
 	<span id="search-description" class="visually-hidden">Results will update as you type</span>
-	<div use:overflow aria-hidden={hits.length ? undefined : true}>
+	<div class="result" use:overflow aria-hidden={hits.length ? undefined : true}>
 		{#if hits.length}
 			<ul on:mouseleave={reset} use:keepSelectedInView use:direction>
 				{#each hits as hit, index}
@@ -120,6 +143,7 @@
 		flex-direction: column;
 		align-items: center;
 		width: auto;
+		height: 100%;
 		padding: 0;
 		background-color: var(--bg);
 	}
@@ -138,6 +162,10 @@
 		width: 100%;
 		padding: 1.5rem;
 		height: auto;
+	}
+
+	.result {
+		width: 100%;
 	}
 
 	ul {
