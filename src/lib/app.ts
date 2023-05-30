@@ -1,5 +1,5 @@
 import { browser } from '$app/environment';
-import { readable, writable } from 'svelte/store';
+import { get, readable, writable } from 'svelte/store';
 
 function create_menu_state() {
 	const { set, subscribe } = writable<'open' | 'closed' | 'inactive'>('inactive');
@@ -58,6 +58,10 @@ function create_theme() {
 
 	const { subscribe, set } = writable<Theme>(get_preferred_theme());
 
+	function toggle() {
+		set_theme(get(theme) === 'dark' ? 'light' : 'dark');
+	}
+
 	function set_theme(theme: Theme) {
 		if (!browser) return;
 		set(theme);
@@ -70,7 +74,8 @@ function create_theme() {
 
 	return {
 		subscribe,
-		set: set_theme
+		set: set_theme,
+		toggle
 	};
 }
 export const theme = create_theme();
