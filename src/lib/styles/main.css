@@ -79,7 +79,7 @@ h4,
 h5,
 h6 {
 	line-height: var(--h-line-height);
-	letter-spacing: normal;
+	letter-spacing: 0.04rem;
 	font-weight: 600;
 }
 

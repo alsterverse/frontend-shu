@@ -28,7 +28,7 @@
 		<Search
 			context="device"
 			focus={site_search_visibility_mobile === 'visible'}
-			on:search_close={on_search_close}
+			on:uisearchclose={on_search_close}
 		/>
 	</div>
 {/if}

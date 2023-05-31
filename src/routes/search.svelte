@@ -20,6 +20,7 @@
 	let hits: AlgoliaSearchHit[] = [];
 
 	const dispatch = createEventDispatcher();
+
 	const algolia_options = {
 		appID: PUBLIC_ALGOLIA_APP_ID,
 		apiKey: PUBLIC_ALGOLIA_API_KEY,
@@ -61,7 +62,7 @@
 	}
 
 	function blur_search(event?: MouseEvent) {
-		dispatch('search_close');
+		dispatch('uisearchclose');
 		window.focus();
 	}
 
