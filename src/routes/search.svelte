@@ -167,15 +167,17 @@
 		padding: 0;
 		background-color: var(--bg);
 	}
+	form:focus-within {
+		--input-bg: var(--theme-bg);
+	}
 
 	:global(.light) form {
 		--divider-color: var(--theme-stroke);
 		--bg: var(--theme-bg-contrast);
 		--input-bg: var(--theme-track);
 	}
-
-	form:focus-within {
-		--input-bg: var(--theme-bg);
+	:global(.light) form:focus-within {
+		--input-bg: var(--theme-stroke);
 	}
 
 	.filter {
