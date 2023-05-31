@@ -12,10 +12,12 @@
 
 	import { direction } from '$lib/actions/direction';
 	import { overflow } from '$lib/actions/overflow';
+	import LoaderBounce from '$lib/components/loader-bounce.svelte';
 
 	export let focus = false;
 	export let context: '' | 'device' = '';
 
+	let loading = false;
 	let search_input: HTMLInputElement;
 	let hits: AlgoliaSearchHit[] = [];
 
@@ -31,10 +33,12 @@
 	let active_hit_index = 0;
 
 	function on_hits(event: CustomEvent<AlgoliaSearchHit[]>) {
+		loading = false;
 		hits = event.detail;
 	}
 
 	function on_pending(event: CustomEvent<boolean>) {
+		loading = true;
 		console.log('pending', event.detail);
 	}
 
@@ -105,6 +109,7 @@
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<span class="icon" on:click={handle_icon} aria-label="Search" />
 		<button>Search</button>
+		<LoaderBounce class={`loader${!loading ? ' hidden' : ''}`} />
 	</div>
 	<span id="search-description" class="visually-hidden">Results will update as you type</span>
 	<div class="result" use:overflow aria-hidden={hits.length ? undefined : true}>
@@ -136,10 +141,24 @@
 </form>
 
 <style>
+	form :global(.loader) {
+		position: absolute;
+		bottom: 2rem;
+		right: 4rem;
+		transform: translate(-50%, -0.25rem);
+		opacity: 1;
+		transition: opacity 300ms ease-in;
+	}
+
+	form :global(.loader.hidden) {
+		opacity: 0;
+	}
+
 	form {
 		--divider-color: var(--theme-track);
 		--bg: var(--theme-card);
 		--input-bg: var(--theme-track);
+
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -160,6 +179,7 @@
 	}
 
 	.filter {
+		position: relative;
 		display: flex;
 		align-items: center;
 		gap: 1rem;
@@ -261,6 +281,12 @@
 		width: 100%;
 		height: 2.5rem;
 		padding: 0 1rem;
+
+		opacity: 0.5;
+	}
+
+	form:focus-within input {
+		opacity: 1;
 	}
 
 	button {
@@ -299,6 +325,9 @@
 	}
 
 	@media (min-width: 55em) {
+		form :global(.loader) {
+			transform: translate(-50%, -1.25rem);
+		}
 		form {
 			border-radius: 1rem;
 			transition: transform 100ms ease-out, background-color 100ms ease-out;
@@ -324,6 +353,7 @@
 			width: 100%;
 			height: auto;
 			padding: 1.5rem;
+			padding: 1.5rem 1.5rem 2.5rem 1.5rem;
 		}
 
 		ul {
