@@ -165,11 +165,15 @@
 		right: 4rem;
 		transform: translate(-50%, -0.25rem);
 		opacity: 1;
-		transition: opacity 300ms ease-in;
+		transition: opacity 300ms ease-in, transform 100ms ease-in;
 	}
 
 	form :global(.loader.hidden) {
 		opacity: 0;
+	}
+
+	form:not(:focus-within) :global(.loader) {
+		transform: translate(-0.25rem, 0.4rem);
 	}
 
 	form {
@@ -185,6 +189,7 @@
 		padding: 0;
 		background-color: var(--bg);
 	}
+
 	form:focus-within {
 		--input-bg: var(--theme-bg);
 	}
