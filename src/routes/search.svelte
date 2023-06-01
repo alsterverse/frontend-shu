@@ -43,6 +43,10 @@
 	}
 
 	function on_keydown(event: KeyboardEvent) {
+		if (event.key === 'Escape') {
+			blur_search();
+			return;
+		}
 		if (!hits.length) return;
 		if (event.key === 'Enter') {
 			event.preventDefault();
@@ -66,8 +70,11 @@
 	}
 
 	function blur_search(event?: MouseEvent) {
-		dispatch('uisearchclose');
+		if (document.activeElement) {
+			(document.activeElement as HTMLElement).blur();
+		}
 		window.focus();
+		dispatch('uisearchclose');
 	}
 
 	afterNavigate(() => {
@@ -116,21 +123,23 @@
 		{#if hits.length}
 			<ul on:mouseleave={reset} use:keepSelectedInView use:direction>
 				{#each hits as hit, index}
-					{@const breadcrumbs = Object.values(hit.hierarchy).filter((value) => value !== null)}
-					{@const title = breadcrumbs.pop()}
+					{@const result = hit._highlightResult}
+					{@const breadcrumbs = Object.values(result.hierarchy).filter((value) => value !== null)}
+					{@const title = breadcrumbs.pop()?.value}
 					{@const url = new URL(hit.url)}
 					<li aria-selected={active_hit_index === index} role="option">
 						<a class="indicator hover" href={url.pathname}>
 							{#if breadcrumbs.length > 0}
 								<ol>
 									{#each breadcrumbs as breadcrumb}
-										<li>{breadcrumb}</li>
+										<li>{breadcrumb.value}</li>
 									{/each}
 								</ol>
 							{/if}
-							<h2>{title}</h2>
-							{#if hit.content}
-								<p>{@html hit.content}</p>
+							<h2>{@html title}</h2>
+
+							{#if result.content?.value}
+								<p>{@html result.content.value}</p>
 							{/if}
 						</a>
 					</li>
@@ -141,6 +150,15 @@
 </form>
 
 <style>
+	form :global(.search-highlight) {
+		background-color: var(--theme-accent);
+		color: var(--theme-fg);
+		padding: 0.125rem 0.25rem;
+		font-weight: 500;
+		letter-spacing: 0.06rem;
+		font-style: normal;
+	}
+
 	form :global(.loader) {
 		position: absolute;
 		bottom: 2rem;

@@ -1,6 +1,6 @@
 import type { default as AlgoliaSearch, SearchClient, SearchIndex } from 'algoliasearch/lite';
 
-export type AlgoliaSearchHit = {
+export type AlgoliaHit = {
 	objectID: string;
 	anchor: string | null;
 	content: string | null;
@@ -14,6 +14,23 @@ export type AlgoliaSearchHit = {
 		lvl6: string | null;
 	};
 	url: string;
+};
+
+type AlgoliaHitHiglight = AlgoliaHit & {
+	hierarchy: {
+		lvl0: { value: string | null };
+		lvl1: { value: string | null };
+		lvl2: { value: string | null };
+		lvl3: { value: string | null };
+		lvl4: { value: string | null };
+		lvl5: { value: string | null };
+		lvl6: { value: string | null };
+	};
+	content: { value: string | null };
+};
+
+export type AlgoliaSearchHit = AlgoliaHit & {
+	_highlightResult: AlgoliaHitHiglight;
 };
 
 function hit_event(hits: AlgoliaSearchHit[]) {
@@ -47,7 +64,11 @@ export function algolia(node: HTMLInputElement, options: AlgoliaActionOptions) {
 
 	function search(value: string) {
 		return async () => {
-			const { hits } = (await index?.search(value)) ?? { hits: [] };
+			const { hits } = (await index?.search(value, {
+				attributesToHighlight: ['content', 'hierarchy'],
+				highlightPreTag: '<em class="search-highlight">',
+				highlightPostTag: '</em>'
+			})) ?? { hits: [] };
 			node.dispatchEvent(pending_event(false));
 			node.dispatchEvent(hit_event(hits as AlgoliaSearchHit[]));
 			last_value = value;
