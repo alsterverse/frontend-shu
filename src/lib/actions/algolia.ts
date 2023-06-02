@@ -66,8 +66,8 @@ export function algolia(node: HTMLInputElement, options: AlgoliaActionOptions) {
 		return async () => {
 			const { hits } = (await index?.search(value, {
 				attributesToHighlight: ['content', 'hierarchy'],
-				highlightPreTag: '<em class="search-highlight">',
-				highlightPostTag: '</em>'
+				highlightPreTag: '<mark class="search-highlight bg-fx">',
+				highlightPostTag: '</mark>'
 			})) ?? { hits: [] };
 			node.dispatchEvent(pending_event(false));
 			node.dispatchEvent(hit_event(hits as AlgoliaSearchHit[]));

@@ -173,10 +173,14 @@
 	form :global(.search-highlight) {
 		background-color: var(--theme-accent);
 		color: var(--theme-fg);
-		padding: 0.125rem 0.25rem;
+		padding: 0.25rem 0.125rem;
 		font-weight: 500;
 		letter-spacing: 0.06rem;
 		font-style: normal;
+	}
+
+	:global(.light) form :global(.search-highlight) {
+		color: var(--theme-bg);
 	}
 
 	form :global(.loader) {
@@ -369,7 +373,7 @@
 
 	@media (min-width: 55em) {
 		form :global(.loader) {
-			transform: translate(-50%, -1.25rem);
+			transform: translate(-50%, -0.25rem);
 		}
 		form {
 			border-radius: 1rem;

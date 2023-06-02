@@ -178,27 +178,6 @@ button.link {
 	line-height: inherit;
 }
 
-a:hover,
-button.link:hover {
-	--color-stop-0: var(--purple-2);
-	--color-stop-1: var(--purple-1);
-	--color-stop-2: var(--purple-0);
-	--color-stop-3: var(--pink-0);
-
-	background: linear-gradient(
-		-45deg,
-		var(--color-stop-0),
-		var(--color-stop-1),
-		var(--color-stop-2),
-		var(--color-stop-3)
-	);
-	background-size: 400% 400%;
-	animation: a-gradient-animation 4s ease-in-out infinite;
-	animation-direction: alternate;
-	-webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;
-}
-
 .indicator {
 	--duration: 200ms;
 	--delay: 200ms;
@@ -335,11 +314,69 @@ button.link:hover {
 	background: none;
 }
 
+.bg-fx,
+a:hover,
+button.link:hover {
+	--color-stop-0: var(--purple-2);
+	--color-stop-1: var(--purple-1);
+	--color-stop-2: var(--purple-0);
+	--color-stop-3: var(--pink-0);
+
+	animation-direction: alternate;
+}
+
+a:hover,
+button.link:hover {
+	background: linear-gradient(
+		-45deg,
+		var(--color-stop-0),
+		var(--color-stop-1),
+		var(--color-stop-2),
+		var(--color-stop-3)
+	);
+	background-size: 400% 400%;
+	animation: a-gradient-animation 4s ease-in-out infinite;
+
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+.bg-fx {
+	background: linear-gradient(
+		-45deg,
+		var(--color-stop-3),
+		var(--color-stop-2),
+		var(--color-stop-1),
+		var(--color-stop-3),
+		var(--color-stop-0)
+	);
+	background-size: 800% 800%;
+	animation: bg-fx-gradient-animation 16s linear infinite;
+}
+
 @keyframes a-gradient-animation {
 	0% {
 		background-position: 100% 0%;
 	}
 	50% {
+		background-position: 0% 50%;
+	}
+	100% {
+		background-position: 100% 0%;
+	}
+}
+
+@keyframes bg-fx-gradient-animation {
+	0% {
+		background-position: 100% 0%;
+	}
+	25% {
+		background-position: 50% 0%;
+	}
+	50% {
+		background-position: 0% 0%;
+	}
+	75% {
 		background-position: 0% 50%;
 	}
 	100% {
