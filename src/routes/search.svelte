@@ -14,6 +14,7 @@
 	import { direction } from '$lib/actions/direction';
 	import { overflow } from '$lib/actions/overflow';
 	import LoaderBounce from '$lib/components/loader-bounce.svelte';
+	import { virtualKeyboardDetector } from '$lib/actions/visual-viewport-resize';
 
 	export let focus = false;
 	export let context: '' | 'device' = '';
@@ -86,25 +87,11 @@
 		}
 	}
 
-	function handle_device_virtual_keyboard(event: Event) {
-		const heightDiff = (event.target as VisualViewport).height;
-		const clientHeight = (document.scrollingElement as Element).clientHeight;
-		if (heightDiff && clientHeight && heightDiff + 30 > clientHeight) {
+	const handle_virtualkeyboard = (event: CustomEvent<{ direction: 'open' | 'close' }>) => {
+		if (event.detail.direction === 'close') {
 			blur_search();
 		}
-	}
-
-	onMount(() => {
-		if (window && window.visualViewport && !$is_large_screen) {
-			window.visualViewport.addEventListener('resize', handle_device_virtual_keyboard);
-		}
-	});
-
-	onDestroy(() => {
-		if (window && window.visualViewport && !$is_large_screen) {
-			window.visualViewport.removeEventListener('resize', handle_device_virtual_keyboard);
-		}
-	});
+	};
 
 	afterNavigate(() => {
 		blur_search();
@@ -118,7 +105,7 @@
 	}
 </script>
 
-<form>
+<form use:virtualKeyboardDetector on:virtualkeyboard={handle_virtualkeyboard}>
 	<div class="filter">
 		<input
 			use:algolia={algolia_options}

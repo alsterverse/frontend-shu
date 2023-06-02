@@ -20,6 +20,7 @@ declare global {
 			'on:hits'?: (event: CustomEvent<AlgoliaSearchHit[]>) => void;
 			'on:pending'?: (event: CustomEvent<boolean>) => void;
 			'on:uisearchclose'?: () => void;
+			'on:virtualkeyboard'?: (event: CustomEvent<{ direction: 'open' | 'close' }>) => void;
 		}
 		interface DOMAttributes<T> {
 			'on:activesection'?: (
@@ -30,6 +31,7 @@ declare global {
 			'on:hits'?: (event: CustomEvent<AlgoliaSearchHit[]>) => void;
 			'on:pending'?: (event: CustomEvent<boolean>) => void;
 			'on:uisearchclose'?: () => void;
+			'on:virtualkeyboard'?: (event: CustomEvent<{ direction: 'open' | 'close' }>) => void;
 		}
 	}
 }
