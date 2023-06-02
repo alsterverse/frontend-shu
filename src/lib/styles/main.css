@@ -344,14 +344,14 @@ button.link:hover {
 .bg-fx {
 	background: linear-gradient(
 		-45deg,
-		var(--color-stop-3),
 		var(--color-stop-2),
 		var(--color-stop-1),
 		var(--color-stop-3),
-		var(--color-stop-0)
+		var(--color-stop-0),
+		var(--color-stop-3)
 	);
 	background-size: 800% 800%;
-	animation: bg-fx-gradient-animation 16s linear infinite;
+	animation: bg-fx-gradient-animation 9s linear infinite;
 }
 
 @keyframes a-gradient-animation {
