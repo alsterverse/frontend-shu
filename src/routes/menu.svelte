@@ -7,36 +7,29 @@
 	import { fade } from 'svelte/transition';
 
 	export let toggle_menu = () => {};
-	let site_search_visibility_mobile: 'visible' | 'hidden' = 'hidden';
-	const set_site_search_visibility = (visibility: 'visible' | 'hidden') => {
-		return () => (site_search_visibility_mobile = visibility);
-	};
+	let small_screen_show_search = false;
+
+	function showSearch() {
+		small_screen_show_search = true;
+	}
+
+	function hideSearch() {
+		small_screen_show_search = false;
+	}
 
 	function on_search_close() {
-		site_search_visibility_mobile = 'hidden';
+		hideSearch();
 	}
 
 	$: menu_expanded = $menu_state === 'open';
 </script>
 
 {#if browser && !$is_large_screen}
-	<div
-		in:fade
-		class="site-search-modal"
-		class:site-search-visible={site_search_visibility_mobile === 'visible'}
-	>
-		<Search
-			context="device"
-			focus={site_search_visibility_mobile === 'visible'}
-			on:uisearchclose={on_search_close}
-		/>
+	<div in:fade class="site-search-modal" class:site-search-visible={small_screen_show_search}>
+		<Search context="device" focus={small_screen_show_search} on:uisearchclose={on_search_close} />
 	</div>
 {/if}
-<menu
-	class:interactive={browser}
-	class:contracted={browser && !menu_expanded}
-	class:site-search-visible={site_search_visibility_mobile === 'visible'}
->
+<menu class:interactive={browser} class:contracted={browser && !menu_expanded}>
 	<section>
 		<a href="/" class="logo"><span class="visually-hidden">Home</span></a>
 		<ButtonMenuToggle class={'button-menu-toggle'} on:click={toggle_menu} state={$menu_state} />
@@ -51,9 +44,7 @@
 			<div class="actions">
 				<!-- svelte-ignore a11y-click-events-have-key-events -->
 				<button class="theme" on:click={theme.toggle}><span />Theme</button>
-				<button class="search" on:click={set_site_search_visibility('visible')}
-					><span />Search</button
-				>
+				<button class="search" on:click={showSearch}><span />Search</button>
 			</div>
 		{/if}
 	</section>
@@ -105,13 +96,6 @@
 		top: unset;
 		opacity: 1;
 		width: calc(100% - var(--gutter-width) * 2);
-	}
-
-	menu.site-search-visible {
-		/* top: 0;
-		left: 0;
-		right: 0;
-        width: 100%; */
 	}
 
 	menu.contracted {

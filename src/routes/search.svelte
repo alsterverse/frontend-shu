@@ -137,7 +137,6 @@
 								</ol>
 							{/if}
 							<h2>{@html title}</h2>
-
 							{#if result.content?.value}
 								<p>{@html result.content.value}</p>
 							{/if}
@@ -266,7 +265,6 @@
 		flex-wrap: wrap;
 		column-gap: 0.25rem;
 		font-size: 0.688rem;
-		padding-right: 2.5rem;
 		line-height: 1;
 		margin: 0;
 		padding: 0;
@@ -306,7 +304,6 @@
 		width: 100%;
 		height: 2.5rem;
 		padding: 0 1rem;
-
 		opacity: 0.5;
 	}
 
@@ -378,7 +375,6 @@
 			width: 100%;
 			height: auto;
 			padding: 1.5rem;
-			padding: 1.5rem 1.5rem 2.5rem 1.5rem;
 		}
 
 		ul {
