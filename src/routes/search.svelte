@@ -8,7 +8,8 @@
 	import { clamp } from '$lib/utils';
 	import { afterNavigate, goto } from '$app/navigation';
 	import { keepSelectedInView } from '$lib/actions/keep-selected-in-view';
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onDestroy, onMount } from 'svelte';
+	import { is_large_screen } from '$lib/app';
 
 	import { direction } from '$lib/actions/direction';
 	import { overflow } from '$lib/actions/overflow';
@@ -77,10 +78,6 @@
 		dispatch('uisearchclose');
 	}
 
-	afterNavigate(() => {
-		blur_search();
-	});
-
 	function handle_icon() {
 		if (focus || context !== 'device') {
 			focus_input();
@@ -88,6 +85,30 @@
 			blur_search();
 		}
 	}
+
+	function handle_device_virtual_keyboard(event: Event) {
+		const heightDiff = (event.target as VisualViewport).height;
+		const clientHeight = (document.scrollingElement as Element).clientHeight;
+		if (heightDiff && clientHeight && heightDiff + 30 > clientHeight) {
+			blur_search();
+		}
+	}
+
+	onMount(() => {
+		if (window && window.visualViewport && !$is_large_screen) {
+			window.visualViewport.addEventListener('resize', handle_device_virtual_keyboard);
+		}
+	});
+
+	onDestroy(() => {
+		if (window && window.visualViewport && !$is_large_screen) {
+			window.visualViewport.removeEventListener('resize', handle_device_virtual_keyboard);
+		}
+	});
+
+	afterNavigate(() => {
+		blur_search();
+	});
 
 	$: {
 		if (focus === true) {
