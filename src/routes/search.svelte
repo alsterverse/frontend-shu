@@ -50,7 +50,7 @@
 		if (!hits.length) return;
 		if (event.key === 'Enter') {
 			event.preventDefault();
-			goto(new URL(hits[active_hit_index].url));
+			goto(new URL(hits[active_hit_index].url).pathname);
 		} else if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
 			event.preventDefault();
 			active_hit_index = clamp(
