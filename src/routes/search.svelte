@@ -140,7 +140,7 @@
 							{#if breadcrumbs.length > 0}
 								<ol>
 									{#each breadcrumbs as breadcrumb}
-										<li>{breadcrumb.value}</li>
+										<li>{@html breadcrumb.value}</li>
 									{/each}
 								</ol>
 							{/if}
