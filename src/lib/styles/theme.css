@@ -73,6 +73,7 @@ body.light {
 	--theme-panel: var(--neutral-blur);
 	--theme-track: var(--neutral-0);
 	--theme-card: var(--neutral-2);
+	--theme-link: var(--purple-1);
 
 	--code-base: var(--neutral-2);
 	--code-surface: var(--rp-dawn-surface);
@@ -109,6 +110,7 @@ body.light {
 		--theme-panel: var(--deepblue-blur);
 		--theme-track: var(--deepblue-4);
 		--theme-card: var(--deepblue-3);
+		--theme-link: var(--purple-3);
 
 		--code-base: var(--deepblue-3);
 		--code-surface: var(--rp-surface);
