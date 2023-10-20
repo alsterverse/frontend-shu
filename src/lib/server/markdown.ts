@@ -72,8 +72,8 @@ function code_block(code: Code) {
 		code.lang ?? ''
 	}">${prism.highlight(
 		code.value,
-		prism.languages[code.lang ?? ''],
-		code.lang ?? ''
+		prism.languages[code.lang ?? 'text'],
+		code.lang ?? 'text'
 	)}</code></pre>`;
 }
 
