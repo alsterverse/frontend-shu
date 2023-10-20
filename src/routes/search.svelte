@@ -8,8 +8,7 @@
 	import { clamp } from '$lib/utils';
 	import { afterNavigate, goto } from '$app/navigation';
 	import { keepSelectedInView } from '$lib/actions/keep-selected-in-view';
-	import { createEventDispatcher, onDestroy, onMount } from 'svelte';
-	import { is_large_screen } from '$lib/app';
+	import { createEventDispatcher } from 'svelte';
 
 	import { direction } from '$lib/actions/direction';
 	import { overflow } from '$lib/actions/overflow';
@@ -40,8 +39,7 @@
 	}
 
 	function on_pending(event: CustomEvent<boolean>) {
-		loading = true;
-		console.log('pending', event.detail);
+		loading = event.detail;
 	}
 
 	function on_keydown(event: KeyboardEvent) {
@@ -67,11 +65,11 @@
 		active_hit_index = 0;
 	}
 
-	function focus_input(event?: MouseEvent) {
+	function focus_input() {
 		search_input.focus();
 	}
 
-	function blur_search(event?: MouseEvent) {
+	function blur_search() {
 		if (document.activeElement) {
 			(document.activeElement as HTMLElement).blur();
 		}
