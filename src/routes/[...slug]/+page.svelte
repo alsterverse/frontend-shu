@@ -5,6 +5,7 @@
 	import NavigationList from '$lib/components/navigation-list.svelte';
 	import '$lib/styles/code.css';
 	import { sleep } from '$lib/utils';
+	import slugify from 'slugify';
 
 	export let data;
 
@@ -48,9 +49,12 @@
 				</div>
 			</header>
 			{#each data.page.sections as section}
-				<section id={section.slug} class:active={anchored && section.slug === active}>
+				<section
+					id={slugify(section.slug ?? '')}
+					class:active={anchored && section.slug === active}
+				>
 					{#if section.title && section.slug}
-						<h2><a href={`#${section.slug}`}>{section.title}</a></h2>
+						<h2><a href={`#${slugify(section.slug)}`}>{section.title}</a></h2>
 					{/if}
 					{@html section.content}
 				</section>
@@ -66,7 +70,7 @@
 								<li>
 									<a
 										class="indicator"
-										href={`#${section.slug}`}
+										href={`#${slugify(section.slug)}`}
 										aria-current={active === section.slug ? 'location' : undefined}
 										>{section.title}</a
 									>
