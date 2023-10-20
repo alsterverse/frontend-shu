@@ -39,8 +39,11 @@
 <li style="--lvl: {node.slug.split('/').length + 1}">
 	{#if node.children}
 		{@const children_id = `children-${node.slug.replaceAll('/', '-')}`}
-		<button class="link" on:click={toggle} aria-expanded={expanded} aria-controls={children_id}
-			>{node.title}</button
+		<button
+			class="link indicator"
+			on:click={toggle}
+			aria-expanded={expanded}
+			aria-controls={children_id}>{node.title}</button
 		>
 		<ul id={children_id} aria-hidden={expanded ? undefined : true}>
 			{#each node.children as child_slug}
@@ -52,6 +55,7 @@
 		</ul>
 	{:else}
 		<a
+			class="indicator"
 			href="/{node.slug}"
 			aria-current={(!$page.params.slug && node.slug === '') || $page.params.slug === node.slug
 				? 'page'

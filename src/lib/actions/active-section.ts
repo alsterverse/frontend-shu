@@ -1,6 +1,6 @@
 import { sleep } from '$lib/utils';
 
-export function active_section(node: HTMLElement) {
+export function activeSection(node: HTMLElement) {
 	let current_active_section: Element | null = null;
 
 	let anchor_interaction_pending = false;
@@ -21,9 +21,7 @@ export function active_section(node: HTMLElement) {
 				new CustomEvent('activesection', {
 					detail: {
 						anchored: !!anchored,
-						active,
-						direction:
-							new_section_details.position > current_section_details.position ? 'down' : 'up'
+						active
 					}
 				})
 			);

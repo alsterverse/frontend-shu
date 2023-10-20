@@ -1,4 +1,7 @@
 // See https://kit.svelte.dev/docs/types#app
+
+import type { AlgoliaSearchHit } from '$lib/actions/algolia';
+
 // for information about these interfaces
 declare global {
 	namespace App {
@@ -14,6 +17,10 @@ declare global {
 			) => void;
 			'on:startoverflowratio'?: (event: CustomEvent<number>) => void;
 			'on:endoverflowratio'?: (event: CustomEvent<number>) => void;
+			'on:hits'?: (event: CustomEvent<AlgoliaSearchHit[]>) => void;
+			'on:pending'?: (event: CustomEvent<boolean>) => void;
+			'on:uisearchclose'?: () => void;
+			'on:virtualkeyboard'?: (event: CustomEvent<{ direction: 'open' | 'close' }>) => void;
 		}
 		interface DOMAttributes<T> {
 			'on:activesection'?: (
@@ -21,6 +28,10 @@ declare global {
 			) => void;
 			'on:startoverflowratio'?: (event: CustomEvent<number>) => void;
 			'on:endoverflowratio'?: (event: CustomEvent<number>) => void;
+			'on:hits'?: (event: CustomEvent<AlgoliaSearchHit[]>) => void;
+			'on:pending'?: (event: CustomEvent<boolean>) => void;
+			'on:uisearchclose'?: () => void;
+			'on:virtualkeyboard'?: (event: CustomEvent<{ direction: 'open' | 'close' }>) => void;
 		}
 	}
 }
