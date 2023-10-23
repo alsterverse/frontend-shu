@@ -1,7 +1,7 @@
 {
   "index_name": "frontend_docs",
   "start_urls": [
-    "https://docs.frontend.alster.se"
+    "https://shu.frontend.alster.se"
   ],
   "stop_urls": [],
   "selectors": {
